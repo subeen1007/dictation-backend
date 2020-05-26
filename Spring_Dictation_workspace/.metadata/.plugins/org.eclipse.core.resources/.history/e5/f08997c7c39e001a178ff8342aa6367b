@@ -1,0 +1,112 @@
+package com.dictation.controller;
+
+import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.dictation.service.UserService;
+import com.dictation.vo.UserVO;
+
+@CrossOrigin("*")
+@RestController
+@RequestMapping(value="/api/user")
+public class UserController {
+	
+	@Autowired
+	private UserService userService;
+	
+	
+    //insert user
+	@PostMapping(produces = "application/json;charset=UTF-8")
+	public void execWrite(@RequestBody UserVO user) {
+		userService.insert(user);
+	}
+
+
+      //according to id delete
+	@GetMapping(value="/delete/{user_id}")
+	public void delete(@PathVariable("user_id") String user_id) {
+		userService.delete(user_id);
+	}
+	//modify
+	//user_id는 같아야 함
+	@PostMapping(value="/update")
+	public void update(@RequestBody UserVO user) {
+		userService.update(user);
+	}
+
+	//according to id Query students
+	@GetMapping(value="/get/{user_id}")
+	public UserVO getById(@PathVariable("user_id") String user_id) {
+		UserVO user = userService.getById(user_id);
+		return user;
+	}
+	
+	//All queries
+	@PostMapping(value="/list")
+	public List<UserVO> list(){
+		return userService.list();
+	}	
+	
+	//추가
+	@PostMapping
+	public String loginPage(Model model, 
+			@CookieValue(value="storeIdCookie", required = false) Cookie storeIdCookie)
+	{
+		UserVO loginInfo = new UserVO();
+		if (storeIdCookie != null)
+		{
+			loginInfo.setUser_id(storeIdCookie.getValue());
+			//loginInfo.setStoreId(true);
+		}
+		model.addAttribute("loginInfo", loginInfo);
+		return "login_page";
+	}
+	
+	
+	public String login(Model model, final HttpSession session,
+            HttpServletResponse response,
+            @ModelAttribute UserVO loginInfo)
+	{
+		System.out.println(loginInfo.getUser_id() + ", " +
+		            loginInfo.getPw() + ", " +
+		            loginInfo.isRemember()
+		            );
+		// 로그인 정보 확인
+		UserVO userVO = userService.loginVerification(loginInfo.getUser_id(), loginInfo.getPw());
+		if(userVO == null) {
+			model.addAttribute("errStr", "로그인 실패: 아이디 및 패스워드를 확인 해주세요.");
+			return "redirect:/login_page";
+		}
+		// 쿠키 생성 및 설정
+		if(loginInfo.isRemember())
+		{
+			Cookie storeIdCookie = new Cookie("storeIdCookie", loginInfo.getId());
+			storeIdCookie.setPath(path + "/login_page");
+			storeIdCookie.setMaxAge(60 * 60 * 24 * 30);
+			response.addCookie(storeIdCookie);
+		}
+		// 세션 설정
+		session.setAttribute(UserConfig.SESS_USER_ID, userVO.getUser_id());
+		session.setAttribute(UserConfig.SESS_USER_NAME, userVO.getNickname());
+		// expired in 10 minutes
+		session.setMaxInactiveInterval(60 * 10);
+		return "redirect:/";
+	}
+}

@@ -1,0 +1,20 @@
+package com.dictation.session;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@RequestMapping(value = "/modify", method = RequestMethod.POST)
+public class Modify {
+	
+
+        HttpSession session = request.getSession();
+
+        Member mem = service.memberModify(member);
+        session.setAttribute("member", mem);
+
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("memAft", mem);
+        mav.setViewName("/member/modifyOk");
+
+        return mav;
+
+}
