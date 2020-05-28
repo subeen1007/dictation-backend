@@ -1,0 +1,97 @@
+package com.dictation.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.dictation.service.LectureService;
+import com.dictation.vo.LectureVO;
+
+
+@CrossOrigin("*")
+@RestController
+@RequestMapping(value="/api/lecture")
+public class LectureController {
+	
+	@Autowired
+	private LectureService lectureService;
+	
+	
+	@PostMapping(produces = "application/json;charset=UTF-8")
+	public void insert(@RequestBody LectureVO lecture) {
+		lectureService.insert(lecture);
+	}
+
+
+      //according to id delete
+	@GetMapping(value="/delete/{lecture_no}")
+	public void delete(@PathVariable("lecture_no") String lecture_no) {
+		lectureService.delete(lecture_no);
+	}
+	//modify
+	//lecture_no는 같아야 함
+	@PostMapping(value="/update")
+	public void update(@RequestBody LectureVO lecture) {
+		lectureService.update(lecture);
+	}
+
+	//according to id Query students
+	@GetMapping(value="/get/{lecture_no}")
+	public LectureVO getById(@PathVariable("lecture_no") String lecture_no) {
+		LectureVO lecture = lectureService.getById(lecture_no);
+		return lecture;
+	}
+	
+	//All queries
+	@PostMapping(value="/list")
+	public List<LectureVO> list(){
+		return lectureService.list();
+	}	
+	
+	
+	//여기서부터 세션 처리
+	//세션설정
+	//강좌로 들어가면 이 부분이 실행되어야함
+	@RequestMapping(value = "/test/{lecture_no}") //lecture_no 값을 post로 받아오게 변경
+	public ModelAndView test(@PathVariable("lecture_no") int lecture_no, HttpServletRequest request) throws Exception {
+	        
+	    HttpSession session = request.getSession();
+	    
+	    session.setAttribute("lecture_no", lecture_no);//lecture_no세션에 lecture_no칼럼 넣음
+	    
+	    ModelAndView mv = new ModelAndView();
+	    mv.setViewName("/test/test");
+	    
+	    
+	    System.out.println(session.getAttribute("lecture_no"));
+	 
+	    return mv;
+	}
+	
+	//세션테스트
+	@GetMapping(value="/list2")
+	public void list2(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		System.out.println("세션출력하기 :");
+		System.out.println(session.getAttribute("lecture_no"));
+		session.invalidate();	//세션 초기화
+		System.out.println("세션지운후 !!");
+		System.out.println(session.getAttribute("lecture_no"));
+			
+	}
+	//session.invalidate(); 세션초기화
+	
+}

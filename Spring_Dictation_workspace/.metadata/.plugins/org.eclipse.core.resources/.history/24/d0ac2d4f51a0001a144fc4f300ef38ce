@@ -1,0 +1,21 @@
+package com.dictation.session;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+import com.dictation.vo.UserVO;
+
+@Controller
+@SessionAttributes("login")//컨트롤러에서 @SessionAttributes를 지정합니다.
+public class LoginController {
+
+    @GetMapping("/login")
+    public String loginRegform(@ModelAttribute("login") UserVO login, Model model) {
+        model.addAttribute("UserVO", "order-page");
+        System.out.println("세션을 호출했습니다.");
+        return "login";
+    }
+}

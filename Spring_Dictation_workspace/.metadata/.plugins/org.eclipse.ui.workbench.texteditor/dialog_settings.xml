@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="user_id"/>
+		<item key="selection" value="lecture_no"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="board_cd"/>
 			<item value="seq_no"/>
 			<item value="board"/>
 			<item value="enroll"/>
@@ -22,13 +23,12 @@
 			<item value="dae_cd"/>
 			<item value="Dae_cd"/>
 			<item value="Dae_cdVO"/>
-			<item value="user"/>
 		</list>
 		<list key="replacehistory">
+			<item value="lecture_no"/>
 			<item value="user_id"/>
 			<item value="Enroll"/>
 			<item value="enroll"/>
-			<item value="lecture_no"/>
 			<item value="Course"/>
 			<item value="course"/>
 			<item value="lecture"/>
