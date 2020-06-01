@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dictation.mapper.UserMapper"> 
+	
+	<!-- Insert a user -->
+	<insert id="insert" parameterType="com.dictation.vo.UserVO">
+		insert into user(
+			user_id,
+			pw,
+			school_cd,
+			position_cd,
+			kor_nm,
+			end_nm,
+			grade,
+			ban,
+			birth_dt,
+			cel_phone_no,
+			hom_phone_no,
+			gender_cd,
+			email
+		) values(
+			#{user_id},
+			#{pw},
+			#{school_cd},
+			#{position_cd},
+			#{kor_nm},
+			#{end_nm},
+			#{grade},
+			#{ban},
+			#{birth_dt},
+			#{cel_phone_no},
+			#{hom_phone_no},
+			#{gender_cd},
+			#{email}
+		)
+	</insert>
+ 
+ 
+ 
+ 
+	<!-- according to id Delete students -->
+	<delete id="delete" parameterType="String">
+		delete from user where user_id=#{user_id}
+	</delete>
+ 
+ 
+	<!-- according to id Modifying Student Information-->
+	<update id="update" parameterType="UserVO">
+		update user
+		set
+			pw=#{pw},
+			school_cd=#{school_cd}
+		where
+			user_id=#{user_id}
+	</update>
+	
+	
+ 
+	<!-- according to id query -->
+	<select id="getById" parameterType="String" resultType="UserVO">
+		select
+			user_id,
+			pw,
+			school_cd,
+			position_cd,
+			kor_nm,
+			end_nm,
+			grade,
+			ban,
+			birth_dt,
+			cel_phone_no,
+			hom_phone_no,
+			gender_cd,
+			email
+		from
+			user
+		where
+			user_id=#{user_id}
+	</select>
+	
+	
+ 
+	<!-- Query all -->
+	<select id="list" parameterType="int" resultType="com.dictation.vo.UserVO" >
+		select
+			user_id,
+			pw,
+			school_cd,
+			position_cd,
+			kor_nm,
+			end_nm,
+			grade,
+			ban,
+			birth_dt,
+			cel_phone_no,
+			hom_phone_no,
+			gender_cd,
+			email
+		from
+			user
+	</select> 
+</mapper>
+
