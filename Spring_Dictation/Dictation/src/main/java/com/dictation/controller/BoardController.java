@@ -40,11 +40,13 @@ public class BoardController {
 		
 		
 		//board_cd
-		board.setDae_b("003");
+		board.setDae_b("006");
 		if(board.getBoard_cd().equals("001")) {//프론트에서 공지사항이면 001로 데이터 값을 넘김  
 			board.setSo_b("001");
-		}else if(board.getBoard_cd().equals("002")) {//프론트에서 Q&A이면 002로 데이터 값을 넘김
+		}else if(board.getBoard_cd().equals("002")) {//프론트에서 학습자료이면 002로 데이터 값을 넘김
 			board.setSo_b("002");
+		}else if(board.getBoard_cd().equals("002")) {////프론트에서 Q&A이면 003로 데이터 값을 넘김
+			board.setSo_b("003");
 		}
 		
 		

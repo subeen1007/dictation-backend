@@ -38,11 +38,13 @@ public class UserController {
 	public void insert(@RequestBody UserVO user) {
 		
 		//position_cd
-		user.setDae_p("001");
-		if(user.getPosition_cd().equals("선생님")) {//프론트에서 선생님이면 "선생님"으로 데이터 값을 넘김  
+		user.setDae_p("003");
+		if(user.getPosition_cd().equals("관리자")) {  
 			user.setSo_p("001");
-		}else if(user.getPosition_cd().equals("학생")) {//프론트에서 학생이면 "학생"으로 데이터 값을 넘김
+		}else if(user.getPosition_cd().equals("선생님")) {//프론트에서 선생님이면 "선생님"으로 데이터 값을 넘김
 			user.setSo_p("002");
+		}else if(user.getPosition_cd().equals("학생")) {//프론트에서 학생이면 "학생"으로 데이터 값을 넘김
+			user.setSo_p("003");
 		}
 		
 		//gender_cd
@@ -83,18 +85,18 @@ public class UserController {
 		return userService.list();
 	}	
 	
-	//로그인
+	//로그인(성공시 position_cd값 반환)
 	@GetMapping(value = "/login/{user_id}&{pw}")
-	public boolean login(@PathVariable("user_id") String user_id,@PathVariable("pw") String pw, HttpServletRequest request) throws Exception {
+	public String login(@PathVariable("user_id") String user_id,@PathVariable("pw") String pw, HttpServletRequest request) throws Exception {
 
 		HttpSession session = request.getSession();
 		
 		if(getById(user_id).getPw().equals(pw)) {//로그인성공 &세션값 줌
 			session.setAttribute("user_id", user_id);
 			System.out.println("세션값 :" +session.getAttribute("user_id"));
-			return true;
+			return getById(user_id).getPosition_cd();
 		}
-	    return false;
+	    return "";
 	}
 	
 	//세션값 생성 메소드
