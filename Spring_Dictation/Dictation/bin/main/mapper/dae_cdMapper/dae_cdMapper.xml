@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dictation.mapper.Dae_cdMapper"> 
+	
+	<!-- Insert a user -->
+	<insert id="insert" parameterType="com.dictation.vo.Dae_cdVO">
+		insert into dae_cd(
+			dae_cd,
+			dae_nm,
+			use_yn,
+			input_id,
+			input_date,
+			update_id,
+			update_date
+			
+		) values(
+			#{dae_cd},
+			#{dae_nm},
+			#{use_yn},
+			#{input_id},
+			#{input_date},
+			#{update_id},
+			#{update_date}
+		)
+	</insert>
+ 
+ 
+ 
+ 
+	<!-- according to id Delete students -->
+	<delete id="delete" parameterType="String">
+		delete from dae_cd where dae_cd=#{dae_cd}
+	</delete>
+ 
+	<!-- according to id Modifying Student Information-->
+	<update id="update" parameterType="Dae_cdVO">
+		update dae_cd
+		set
+			dae_nm=#{dae_nm},
+			use_yn=#{use_yn},			
+			input_id=#{input_id},
+			input_date=#{input_date},
+			update_id=#{update_id},
+			update_date=#{update_date}
+		where
+			dae_cd=#{dae_cd}
+	</update>
+	
+	
+ 
+	<!-- according to id query -->
+	<select id="getById" parameterType="String" resultType="Dae_cdVO">
+		select
+			dae_cd,
+			dae_nm,
+			use_yn,
+			input_id,
+			input_date,
+			update_id,
+			update_date
+		from
+			dae_cd
+		where
+			dae_cd=#{dae_cd}
+	</select>
+	
+	
+ 
+	<!-- Query all -->
+	<select id="list" parameterType="int" resultType="com.dictation.vo.Dae_cdVO">
+		select
+			dae_cd,
+			dae_nm,
+			use_yn,
+			input_id,
+			input_date,
+			update_id,
+			update_date
+		from
+			dae_cd
+	</select> 
+</mapper>
+

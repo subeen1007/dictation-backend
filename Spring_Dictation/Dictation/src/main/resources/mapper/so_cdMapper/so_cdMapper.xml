@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dictation.mapper.So_cdMapper"> 
+	
+	<!-- Insert a so_cd -->
+	<insert id="insert" parameterType="com.dictation.vo.So_cdVO">
+		insert into so_cd(
+			dae_cd,
+			so_cd,
+			so_nm,
+			use_yn,
+			bigo	
+		) values(
+			#{dae_cd},
+			#{so_cd},
+			#{so_nm},
+			#{use_yn},
+			#{bigo}
+		)
+	</insert>
+ 
+ 
+ 
+ 
+	<!-- according to id Delete students -->
+	<delete id="delete" parameterType="String">
+		delete from so_cd where so_cd=#{so_cd}
+	</delete>
+ 
+	<!-- according to id Modifying Student Information-->
+	<update id="update" parameterType="So_cdVO">
+		update so_cd
+		set
+			dae_cd=#{dae_cd},
+			so_cd=#{so_cd},
+			so_nm=#{so_nm},
+			use_yn=#{use_yn},
+			bigo=#{bigo}
+			
+		where
+			so_cd=#{so_cd}
+	</update>
+	
+	
+ 
+	<!-- according to id query -->
+	<select id="getById" parameterType="String" resultType="So_cdVO">
+		select
+			dae_cd,
+			so_cd,
+			so_nm,
+			use_yn,
+			bigo
+		from
+			so_cd
+		where
+			so_cd=#{so_cd}
+	</select>
+	
+	
+ 
+	<!-- Query all -->
+	<select id="list" parameterType="int" resultType="com.dictation.vo.So_cdVO">
+		select
+			dae_cd,
+			so_cd,
+			so_nm,
+			use_yn,
+			bigo
+		from
+			so_cd
+	</select> 
+	
+</mapper>
+

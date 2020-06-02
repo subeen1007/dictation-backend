@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dictation.mapper.EnrollMapper"> 
+	
+	<!-- Insert a enroll -->
+	<insert id="insert" parameterType="com.dictation.vo.EnrollVO">
+		insert into enroll(
+			year,
+			term,
+			lecture_no,
+			user_id,
+			register_dt,
+			approval_cd,
+			approval_dt,
+			pass_course_no,
+			study_time,
+			input_id,
+			input_date,
+			update_id,
+			update_date
+			
+		) values(
+			(select year from term_cd where use_yn=1),
+			(select term from term_cd where use_yn=1),
+			#{lecture_no},
+			#{user_id},
+			#{register_dt},
+			#{approval_cd},
+			#{approval_dt},
+			#{pass_course_no},
+			#{study_time},
+			#{input_id},
+			#{input_date},
+			#{update_id},
+			#{update_date}
+		)
+	</insert>
+ 
+ 
+ 
+ 
+	<!-- according to id Delete students -->
+	<delete id="delete" parameterType="String">
+		delete from enroll where user_id=#{user_id}
+	</delete>
+ 
+	<!-- according to id Modifying Student Information-->
+	<update id="update" parameterType="EnrollVO">
+		update enroll
+		set
+			year=#{year},
+			term=#{term},
+			lecture_no=#{lecture_no},
+			user_id=#{user_id},
+			register_dt=#{register_dt},
+			approval_cd=#{approval_cd},
+			approval_dt=#{approval_dt},
+			pass_course_no=#{pass_course_no},
+			study_time=#{study_time},
+			input_id=#{input_id},
+			input_date=#{input_date},
+			update_id=#{update_id},
+			update_date=#{update_date}
+			
+		where
+			user_id=#{user_id}
+	</update>
+	
+	
+ 
+	<!-- according to id query -->
+	<select id="getById" parameterType="String" resultType="EnrollVO">
+		select
+			year,
+			term,
+			lecture_no,
+			user_id,
+			register_dt,
+			approval_cd,
+			approval_dt,
+			pass_course_no,
+			study_time,
+			input_id,
+			input_date,
+			update_id,
+			update_date
+		from
+			enroll
+		where
+			user_id=#{user_id}
+	</select>
+	
+	
+ 
+	<!-- Query all -->
+	<select id="list" parameterType="int" resultType="com.dictation.vo.EnrollVO">
+		select
+			year,
+			term,
+			lecture_no,
+			user_id,
+			register_dt,
+			approval_cd,
+			approval_dt,
+			pass_course_no,
+			study_time,
+			input_id,
+			input_date,
+			update_id,
+			update_date
+		from
+			enroll
+	</select> 
+</mapper>
+

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dictation.mapper.LectureMapper"> 
+	
+	<!-- Insert a lecture -->
+	<insert id="insert" parameterType="com.dictation.vo.LectureVO">
+		insert into lecture(
+			year,
+			term,
+			lecture_no,
+			lecture_nm,
+			school_cd,
+			grade,
+			ban,
+			enroll_st_dt,
+			enroll_ed_dt,
+			max_cnt,
+			teacher_id,			
+			input_id,
+			input_date,
+			update_id,
+			update_date
+			
+		) values(
+			(select year from term_cd where use_yn=1),
+			(select term from term_cd where use_yn=1),
+			#{lecture_no},
+			#{lecture_nm},
+			#{school_cd},
+			#{grade},
+			#{ban},
+			#{enroll_st_dt},
+			#{enroll_ed_dt},
+			#{max_cnt},
+			#{teacher_id},
+			#{input_id},
+			#{input_date},
+			#{update_id},
+			#{update_date}
+		)
+	</insert>
+ 
+ 
+ 
+ 
+	<!-- according to id Delete students -->
+	<delete id="delete" parameterType="String">
+		delete from lecture where lecture_no=#{lecture_no}
+	</delete>
+ 
+	<!-- according to id Modifying Student Information-->
+	<update id="update" parameterType="LectureVO">
+		update lecture
+		set
+			year=#{year},
+			term=#{term},
+			lecture_no=#{lecture_no},
+			lecture_nm=#{lecture_nm},
+			school_cd=#{school_cd},
+			grade=#{grade},
+			grade=#{ban},
+			enroll_st_dt=#{enroll_st_dt},
+			enroll_ed_dt=#{enroll_ed_dt},
+			max_cnt=#{max_cnt},
+			teacher_id=#{teacher_id},
+			input_id=#{input_id},
+			input_date=#{input_date},
+			update_id=#{update_id},
+			update_date=#{update_date}
+			
+		where
+			lecture_no=#{lecture_no}
+	</update>
+	
+	
+ 
+	<!-- according to id query -->
+	<select id="getById" parameterType="String" resultType="LectureVO">
+		select
+			year,
+			term,
+			lecture_no,
+			lecture_nm,
+			school_cd,
+			grade,
+			ban,
+			enroll_st_dt,
+			enroll_ed_dt,
+			max_cnt,
+			teacher_id,			
+			input_id,
+			input_date,
+			update_id,
+			update_date
+		from
+			lecture
+		where
+			lecture_no=#{lecture_no}
+	</select>
+	
+	
+ 
+	<!-- Query all -->
+	<select id="list" parameterType="int" resultType="com.dictation.vo.LectureVO">
+		select
+			year,
+			term,
+			lecture_no,
+			lecture_nm,
+			school_cd,
+			grade,
+			ban,
+			enroll_st_dt,
+			enroll_ed_dt,
+			max_cnt,
+			teacher_id,			
+			input_id,
+			input_date,
+			update_id,
+			update_date
+		from
+			lecture
+	</select> 
+</mapper>
+
