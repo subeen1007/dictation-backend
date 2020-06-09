@@ -23,8 +23,8 @@ public class CourseService {
 	}
 
 	//according to id delete
-	public void delete(String lecture_no) {
-		courseMapper.delete(lecture_no);
+	public void delete(CourseVO course) {
+		courseMapper.delete(course);
 	}
 
 	//according to user Of id modify
@@ -33,13 +33,18 @@ public class CourseService {
 	}
 
 	//according to id query
-	public CourseVO getById(String lecture_no) {
+	public CourseVO getById(int lecture_no) {
 		return courseMapper.getById(lecture_no);
 	}
 
 	//All queries
 	public List<CourseVO> list(){
 		return courseMapper.list();
+	}
+	
+	//search file_nm for file download
+	public String getFileNm(String save_file_nm) {
+		return courseMapper.getFileNm(save_file_nm);
 	}
 	
 

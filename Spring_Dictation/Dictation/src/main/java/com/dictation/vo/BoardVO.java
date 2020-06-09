@@ -12,7 +12,7 @@ public class BoardVO {
 	private String term;
 	private int lecture_no;
 	private String board_cd;
-	private int no;
+	private long no;
 	private int seq_no;
 	private String title;
 	private String content;

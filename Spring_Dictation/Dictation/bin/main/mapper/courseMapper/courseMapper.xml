@@ -39,8 +39,10 @@
  
  
 	<!-- according to id Delete students -->
-	<delete id="delete" parameterType="String">
-		delete from course where lecture_no=#{lecture_no}
+	<delete id="delete" parameterType="CourseVO">
+		delete from course 
+		where
+			lecture_no=#{lecture_no} and course_no=#{course_no} and question_no=#{question_no}
 	</delete>
  
 	<!-- according to id Modifying Student Information-->
@@ -67,7 +69,7 @@
 	
  
 	<!-- according to id query -->
-	<select id="getById" parameterType="String" resultType="CourseVO">
+	<select id="getById" parameterType="int" resultType="CourseVO">
 		select
 			year,
 			term,
@@ -107,5 +109,15 @@
 		from
 			course
 	</select> 
+	
+	
+	<select id="getFileNm" parameterType="String" resultType="String">
+		select
+			file_nm			
+		from
+			course
+		where
+			save_file_nm=#{save_file_nm}
+	</select>
 </mapper>
 

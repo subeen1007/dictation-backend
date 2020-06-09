@@ -28,7 +28,7 @@
 			#{lecture_no},
 			(select concat(dae_cd, so_cd) from so_cd where dae_cd=#{dae_b} and so_cd=#{so_b} and use_yn=1),
 			#{no},
-			#{seq_no},
+			(select nvl(max(seq_no),0)+1 from board ALIAS_FOR_SUBQUERY where no=#{seq_no}),
 			#{title},
 			#{content},
 			#{read_cnt},
@@ -45,9 +45,18 @@
  
  
 	<!-- according to id Delete students -->
-	<delete id="delete" parameterType="String">
-		delete from board where seq_no=#{seq_no}
+	<delete id="delete" parameterType="Hashmap">
+		delete from board where no=#{no} and seq_no=#{seq_no}
 	</delete>
+	
+	<!-- update after delete -->
+	<update id="after_delete" parameterType="Hashmap">
+		update board
+		set
+			seq_no=seq_no-1
+		where
+			no=#{no} and seq_no>=#{seq_no}
+	</update>
  
 	<!-- according to id Modifying Student Information-->
 	<update id="update" parameterType="BoardVO">
@@ -70,13 +79,13 @@
 			update_date=#{update_date}
 			
 		where
-			seq_no=#{seq_no}
+			no=#{no} and seq_no=#{seq_no}
 	</update>
 	
 	
  
 	<!-- according to id query -->
-	<select id="getById" parameterType="String" resultType="BoardVO">
+	<select id="getById" parameterType="Hashmap" resultType="BoardVO">
 		select
 			year,
 			term,
@@ -96,7 +105,7 @@
 		from
 			board
 		where
-			seq_no=#{seq_no}
+			no=#{no} and seq_no=#{seq_no}
 	</select>
 	
 	
@@ -122,5 +131,14 @@
 		from
 			board
 	</select> 
+	
+	<select id="getFileNm" parameterType="String" resultType="String">
+		select
+			file_nm			
+		from
+			board
+		where
+			save_file_nm=#{save_file_nm}
+	</select>
 </mapper>
 

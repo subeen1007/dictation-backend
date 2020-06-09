@@ -23,7 +23,7 @@
 			#{user_id},
 			#{pw},
 			#{school_cd},
-			(select concat(dae_cd, so_cd) from so_cd where dae_cd=#{dae_p} and so_cd=#{so_p}),
+			(select concat(dae_cd, so_cd) from so_cd where dae_cd=#{dae_p} and so_cd=#{so_p} and use_yn=1),
 			#{kor_nm},
 			#{end_nm},
 			#{grade},
@@ -31,7 +31,7 @@
 			#{birth_dt},
 			#{cel_phone_no},
 			#{hom_phone_no},
-			(select concat(dae_cd, so_cd) from so_cd where dae_cd=#{dae_g} and so_cd=#{so_g}),
+			(select concat(dae_cd, so_cd) from so_cd where dae_cd=#{dae_g} and so_cd=#{so_g} and use_yn=1),
 			#{email}
 		)
 	</insert>
