@@ -69,7 +69,7 @@
 	
  
 	<!-- according to id query -->
-	<select id="getById" parameterType="int" resultType="CourseVO">
+	<select id="getById" parameterType="CourseVO" resultType="CourseVO">
 		select
 			year,
 			term,
@@ -86,7 +86,7 @@
 		from
 			course
 		where
-			lecture_no=#{lecture_no}
+			lecture_no=#{lecture_no} and course_no=#{course_no} and question_no=#{question_no}
 	</select>
 	
 	

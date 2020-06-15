@@ -21,7 +21,7 @@ public interface CourseMapper {	//courseMapper.xml에서 이름,명령어 지정
 	public void update(CourseVO course);
 
 	//according to id query
-	public CourseVO getById(int lecture_no);	//일단은 lecture_no으로
+	public CourseVO getById(CourseVO course);	//일단은 lecture_no으로
 
 	//All queries
 	public List<CourseVO> list();

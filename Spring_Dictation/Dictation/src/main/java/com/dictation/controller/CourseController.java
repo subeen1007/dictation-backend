@@ -51,6 +51,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.dictation.service.CourseService;
+import com.dictation.vo.BoardVO;
 import com.dictation.vo.CourseVO;
 
 
@@ -66,12 +67,17 @@ public class CourseController {
 	//단계번호, 문항번호는 vue에서 가져옴
     //insert user
 	@PostMapping(produces = "application/json;charset=UTF-8")
-	public void insert(@RequestBody CourseVO course,HttpServletRequest request) {
+	public void insert(@RequestBody CourseVO course,HttpServletRequest request) throws Exception{
+			
+		//+db에 file_nm, save_file_nm저장하기
+		//course.setFile_nm(originalfileName);
+		//course.setSave_file_nm(save_file_nm);
 		
-		//lecture_no
-		HttpSession session = request.getSession();
-		int lecture_session=(int)session.getAttribute("lecture_no");		
-		course.setLecture_no(lecture_session);
+		
+		//lecture_no 세션값으로 저장
+		//HttpSession session = request.getSession();
+		//int lecture_session=(int)session.getAttribute("lecture_no");		
+		//course.setLecture_no(lecture_session);
 		
 		courseService.insert(course);
 	}
@@ -79,9 +85,14 @@ public class CourseController {
 
       //according to id delete
 	@GetMapping(value="/delete/{lecture_no}&{course_no}&{question_no}")
-	public void delete(@PathVariable("course") CourseVO course) {
+	public void delete(@PathVariable("lecture_no") int lecture_no, @PathVariable("course_no") int course_no, @PathVariable("question_no") int question_no) {
+		CourseVO course=new CourseVO();
+		course.setLecture_no(lecture_no);
+		course.setCourse_no(course_no);
+		course.setQuestion_no(question_no);
 		courseService.delete(course);
 	}
+	
 	//modify
 	//lecture_no는 같아야 함
 	@PostMapping(value="/update")
@@ -90,9 +101,14 @@ public class CourseController {
 	}
 
 	//according to id Query students
-	@GetMapping(value="/get/{lecture_no}")
-	public CourseVO getById(@PathVariable("lecture_no") int lecture_no) {
-		CourseVO course = courseService.getById(lecture_no);
+	@GetMapping(value="/get/{lecture_no}&{course_no}&{question_no}")
+	public CourseVO getById(@PathVariable("lecture_no") int lecture_no, @PathVariable("course_no") int course_no, @PathVariable("question_no") int question_no) {
+		CourseVO course2=new CourseVO();
+		course2.setLecture_no(lecture_no);
+		course2.setCourse_no(course_no);
+		course2.setQuestion_no(question_no);
+		
+		CourseVO course = courseService.getById(course2);
 		return course;
 	}
 	
@@ -101,6 +117,22 @@ public class CourseController {
 	public List<CourseVO> list(){
 		return courseService.list();
 	}	
+	
+	
+	//정답비교(학생답을 매개변수로 넣음)
+	@PostMapping(value="/answer")
+	public boolean answer(@RequestBody CourseVO course) {
+		//원래는 세션값에서 no, seq_no가져와야 함
+		String question = course.getQuestion();
+		CourseVO course2 =courseService.getById(course);
+		
+		if(question.equals(course2.getQuestion())) {
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
 	
 	
 	//파일 업로드를 위함(1개의 파일)

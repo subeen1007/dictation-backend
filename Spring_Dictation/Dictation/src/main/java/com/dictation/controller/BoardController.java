@@ -82,6 +82,7 @@ public class BoardController {
 		board.setNo(Long.valueOf(no));
 		board.setSeq_no(Integer.valueOf(no));
 		
+		
 		boardService.insert(board);
 	}
 
@@ -118,6 +119,7 @@ public class BoardController {
 	public List<BoardVO> list(){
 		return boardService.list();
 	}
+	
 	
 
 	@PostMapping("/upload")

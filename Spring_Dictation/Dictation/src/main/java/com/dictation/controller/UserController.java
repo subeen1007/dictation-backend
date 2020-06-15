@@ -57,6 +57,7 @@ public class UserController {
 		}
 		
 		userService.insert(user);
+		
 	}
 
 
@@ -88,7 +89,7 @@ public class UserController {
 	//로그인(성공시 UserVO값 세션값으로 저장하고, position_cd값 반환)
 	//나중에는 post로 user_id 값 줄것
 	@GetMapping(value = "/login/{user_id}&{pw}")
-	public String login(@PathVariable("user_id") String user_id,@PathVariable("pw") String pw, HttpServletRequest request) throws Exception {
+	public UserVO login(@PathVariable("user_id") String user_id,@PathVariable("pw") String pw, HttpServletRequest request) throws Exception {
 
 		HttpSession session = request.getSession();
 		UserVO user = getById(user_id);
@@ -100,9 +101,9 @@ public class UserController {
 			System.out.println("아이디 세션값 :" +user_session.getUser_id());
 			System.out.println("신분코드 세션값 :" +user_session.getPosition_cd());
 			
-			return getById(user_id).getPosition_cd();
+			return getById(user_id);
 		}
-	    return "";
+	    return null;
 	}
 	
 	//세션값 생성 메소드(세션값으로 user_id만 저장하는 메소드)

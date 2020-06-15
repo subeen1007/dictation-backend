@@ -33,8 +33,8 @@ public class CourseService {
 	}
 
 	//according to id query
-	public CourseVO getById(int lecture_no) {
-		return courseMapper.getById(lecture_no);
+	public CourseVO getById(CourseVO course) {
+		return courseMapper.getById(course);
 	}
 
 	//All queries
