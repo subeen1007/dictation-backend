@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dictation.service.CourseService;
 import com.dictation.service.EnrollService;
+import com.dictation.vo.CourseVO;
 import com.dictation.vo.EnrollVO;
 
 
@@ -28,6 +30,8 @@ public class EnrollController {
 	
 	@Autowired
 	private EnrollService enrollService;
+	@Autowired
+	private CourseService courseService;
 	
 	
     //insert user
@@ -66,4 +70,32 @@ public class EnrollController {
 	public List<EnrollVO> list(){
 		return enrollService.list();
 	}	
+	
+	//정답비교(학생답을 매개변수로 넣음)
+	@PostMapping(value="/answer")
+	public boolean[] answer(@RequestBody CourseVO[] courseList) {
+		//quesion, lecture_no, course_no, quesion_no가져와야 함
+		//원래 lecture_no, user_id는 세션값으로 가져와야함(일단 user_id는 임의로 만듬)
+
+		String question;
+		CourseVO course;
+		boolean[] answer=new boolean[courseList.length];
+
+		for(int i=0; i<courseList.length; i++) {
+			question=courseList[i].getQuestion();
+			course=courseService.getById(courseList[i]);
+			if(question.equals(course.getQuestion())) {
+				answer[i]=true;
+			}else {
+				answer[i]=false;
+			}
+		}
+		EnrollVO enroll=new EnrollVO();
+		enroll.setLecture_no(courseList[1].getLecture_no());
+		enroll.setUser_id("vv");//임시 아이디(user_id가 기존 enroll에 있어야함)
+		enroll.setPass_course_no(courseList[1].getCourse_no());
+		enrollService.update(enroll);
+		return answer;
+		
+	}
 }

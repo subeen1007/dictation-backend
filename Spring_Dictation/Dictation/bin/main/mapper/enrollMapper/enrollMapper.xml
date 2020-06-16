@@ -49,22 +49,14 @@
 	<update id="update" parameterType="EnrollVO">
 		update enroll
 		set
-			year=#{year},
-			term=#{term},
-			lecture_no=#{lecture_no},
-			user_id=#{user_id},
-			register_dt=#{register_dt},
-			approval_cd=#{approval_cd},
-			approval_dt=#{approval_dt},
 			pass_course_no=#{pass_course_no},
 			study_time=#{study_time},
 			input_id=#{input_id},
 			input_date=#{input_date},
 			update_id=#{update_id},
 			update_date=#{update_date}
-			
 		where
-			user_id=#{user_id}
+			user_id=#{user_id} and lecture_no=#{lecture_no}
 	</update>
 	
 	
