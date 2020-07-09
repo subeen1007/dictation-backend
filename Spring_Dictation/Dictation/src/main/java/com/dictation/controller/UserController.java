@@ -74,11 +74,11 @@ public class UserController {
 	}
 
 	//according to id Query students
-	@GetMapping(value="/get/{user_id}")
-	public UserVO getById(@PathVariable("user_id") String user_id) {
-		UserVO user = userService.getById(user_id);
-		return user;
-	}
+		@GetMapping(value="/get/{user_id}")
+		public UserVO getById(@PathVariable("user_id") String user_id) {
+			UserVO user = userService.getById(user_id);
+			return user;
+		}
 	
 	//All queries
 	@GetMapping(value="/list")
@@ -93,18 +93,29 @@ public class UserController {
 
 		HttpSession session = request.getSession();
 		UserVO user = getById(user_id);
-		if(user.getPw().equals(pw)) {//로그인성공 &세션값 줌
+		
+		if(user.equals(null) || user == null) {
+		    user.setLoginYn("0");
+		    return user;
+		}else if(user.getPw().equals(pw)) {//로그인성공 &세션값 줌
+			//if() 관리자코드, 선생님코드 로그인시 세션확인값 생성 필요
 			
 			session.setAttribute("user", user);//세션에 UserVO값줌
 			
 			UserVO user_session=(UserVO)session.getAttribute("user");
 			System.out.println("아이디 세션값 :" +user_session.getUser_id());
+			System.out.println("비밀번호 세션값 :" +user_session.getPw());
 			System.out.println("신분코드 세션값 :" +user_session.getPosition_cd());
-			
-			return getById(user_id);
+			user.setLoginYn("1");
+			return user;
+		}else {
+			System.out.println("리턴값확인완료");
+			session.setAttribute("login_fail", pw);
+			user.setLoginYn("0");
+			return user;
 		}
-	    return null;
 	}
+
 	
 	//세션값 생성 메소드(세션값으로 user_id만 저장하는 메소드)
 	@GetMapping(value = "/user_id/{user_id}")

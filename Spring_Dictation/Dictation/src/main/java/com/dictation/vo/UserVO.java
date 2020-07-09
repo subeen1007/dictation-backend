@@ -24,6 +24,7 @@ public class UserVO {
 	private String hom_phone_no;
 	private String gender_cd;
 	private String email;
+	private String loginYn;
 	
 	//position_cd 에서 dae_cd와 so_cd값을 합치기 위한 변수
 	private String dae_p;
