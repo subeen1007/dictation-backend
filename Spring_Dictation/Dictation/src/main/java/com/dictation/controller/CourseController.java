@@ -1,6 +1,7 @@
 package com.dictation.controller;
 
 import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -43,9 +44,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -76,7 +79,7 @@ public class CourseController {
 		//course.setSave_file_nm(save_file_nm);
 		
 		
-		//lecture_no 세션값으로 저장
+		//lecture_no을 세션값에서 가져와서 저장
 		//HttpSession session = request.getSession();
 		//int lecture_session=(int)session.getAttribute("lecture_no");		
 		//course.setLecture_no(lecture_session);
@@ -296,4 +299,6 @@ public class CourseController {
 		return list;
 	}
 	*/
+	
+
 }

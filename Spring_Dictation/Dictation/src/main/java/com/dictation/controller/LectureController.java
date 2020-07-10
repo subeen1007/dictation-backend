@@ -1,8 +1,10 @@
 package com.dictation.controller;
 
+import java.io.File;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,10 +19,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.dictation.service.CourseService;
 import com.dictation.service.LectureService;
+import com.dictation.vo.CourseVO;
 import com.dictation.vo.LectureVO;
 
 
@@ -31,10 +37,14 @@ public class LectureController {
 	
 	@Autowired
 	private LectureService lectureService;
+	@Autowired
+	private CourseService courseService;
 
-	
+	//강좌개설(강좌정보 + 받아쓰기정보 받아옴)
+	//강좌정보는 lecture테이블에 넣고, 받아쓰기정보는 배열로 받아와서 course테이블에 넣음
+	@CrossOrigin("*")
 	@PostMapping(produces = "application/json;charset=UTF-8")
-	public void insert(@RequestBody LectureVO lecture) {
+	public void insert_lec_cour(@RequestBody LectureVO lecture, @RequestBody CourseVO[] course) {
 		//프론트엔드 lecture_nm, grade, ban받아옴
 		//백엔드 lecture_no, school_cd 추가(enroll_st_dt는 추후에 맵퍼에서 추가)
 
@@ -47,11 +57,20 @@ public class LectureController {
 			db_lec_no = lectureService.lecture_no_search(lecture_no);
 		}
 		
-		
-		lecture.setLecture_no(lecture_no);
-		
+		lecture.setLecture_no(lecture_no);		
 		lectureService.insert(lecture);
+		
+		//받아쓰기 정보들 DB에 저장
+		for(int i=0; i<course.length; i++) {
+			course[i].setLecture_no(lecture_no);
+			
+			//음성파일 추가해야함
+			
+			courseService.insert(course[i]);
+		
+		}
 	}
+	
 	
 	public int rand(int num) {//num자리번호 난수생성
 		Random random = new Random();
