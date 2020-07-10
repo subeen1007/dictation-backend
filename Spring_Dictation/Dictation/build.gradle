@@ -26,6 +26,10 @@ dependencies {
 	implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'commons-io:commons-io:2.6'
 
+ 	//security
+ 	implementation 'org.springframework.boot:spring-boot-starter-security'
+ 	testImplementation 'org.springframework.security:spring-security-test'
+
  
 	// jdbc
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'

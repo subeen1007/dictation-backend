@@ -31,9 +31,13 @@ public class LectureService {
 	public void update(LectureVO lecture) {
 		lectureMapper.update(lecture);
 	}
+	
+	public int lecture_no_search(int lecture_no) {
+		return lectureMapper.lecture_no_search(lecture_no);
+	}
 
 	//according to id query
-	public LectureVO getById(String lecture_no) {
+	public LectureVO getById(int lecture_no) {
 		return lectureMapper.getById(lecture_no);
 	}
 
