@@ -6,6 +6,15 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     username: 이름
     password: 사용자
+    
+    
+servlet:
+  multipart:
+    enabled: true
+    file-size-threshold: 1MB
+    location: C:/Temp
+    max-file-size: 100MB
+    max-request-size: 100MB    
 
 mybatis:
  mapper-locations: classpath:mapper/**/*.xml
