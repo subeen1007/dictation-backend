@@ -20,8 +20,11 @@ public interface LectureMapper {	//lectureMapper.xml에서 이름,명령어 지정
 	//according to user Of id modify
 	public void update(LectureVO lecture);
 
+	//강좌번호 생성할때 중복되는 강좌가 있는지 검사하는코드
+	public int lecture_no_search(int lecture_no);
+	
 	//according to id query
-	public LectureVO getById(String lecture_no);
+	public LectureVO getById(int lecture_no);
 
 	//All queries
 	public List<LectureVO> list();

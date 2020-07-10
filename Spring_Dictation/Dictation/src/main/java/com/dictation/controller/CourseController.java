@@ -64,11 +64,13 @@ public class CourseController {
 	private CourseService courseService;
 	private LectureController lectureController;
 	
-	//단계번호, 문항번호는 vue에서 가져옴
+	//단계번호, 문항번호, 정답은 vue에서 가져옴(CourseVO 1개씩만 insert)
     //insert user
 	@PostMapping(produces = "application/json;charset=UTF-8")
 	public void insert(@RequestBody CourseVO course,HttpServletRequest request) throws Exception{
-			
+		//프론트엔드에서 course_no, question_no, question 가져오기
+		
+		
 		//+db에 file_nm, save_file_nm저장하기
 		//course.setFile_nm(originalfileName);
 		//course.setSave_file_nm(save_file_nm);
@@ -175,10 +177,11 @@ public class CourseController {
         }
 	}
 	
+	//학생이 받아쓰기를 진행할때 음성파일 클릭시 음성나오도록 구현
 	//.wav에서 test성공, .mp3에선 작동안함(+post로 경로값 받아올것) 
 	@GetMapping(value="/sound")
 	public void soundPlay() {
-		File file = new File("C:\\Users\\subin\\Desktop\\Spring_소리파일\\(남성)흐흐흐흐.wav");
+		File file = new File("C:\\Users\\subin\\Desktop\\딕테이션_프로젝트\\각종문서\\(남성)흐흐흐흐.wav");
 		AudioInputStream audioInputStream =null;
 		SourceDataLine auline =null;
 		

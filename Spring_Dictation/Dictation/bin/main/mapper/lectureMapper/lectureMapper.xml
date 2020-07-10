@@ -74,9 +74,20 @@
 	</update>
 	
 	
+	<!-- 강좌번호 생성할때 중복되는 강좌가 있는지 검사하는코드 -->
+	<select id="lecture_no_search" parameterType="int" resultType="int">
+		select
+			lecture_no
+		from
+			lecture
+		where
+			lecture_no=#{lecture_no}
+	</select>
+	
+	
  
 	<!-- according to id query -->
-	<select id="getById" parameterType="String" resultType="LectureVO">
+	<select id="getById" parameterType="int" resultType="LectureVO">
 		select
 			year,
 			term,
