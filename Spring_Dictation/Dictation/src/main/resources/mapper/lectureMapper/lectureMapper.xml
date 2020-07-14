@@ -75,7 +75,7 @@
 	
 	
 	<!-- 강좌번호 생성할때 중복되는 강좌가 있는지 검사하는코드 -->
-	<select id="lecture_no_search" parameterType="int" resultType="int">
+	<select id="lecture_no_search" parameterType="int" resultType="Object">
 		select
 			lecture_no
 		from
@@ -84,6 +84,30 @@
 			lecture_no=#{lecture_no}
 	</select>
 	
+	
+	<!-- 선생님 본인이 개설한 강좌목록 띄우기 위한 코드 -->
+	<select id="teacher_mylec" parameterType="String" resultType="LectureVO">
+		select
+			year,
+			term,
+			lecture_no,
+			lecture_nm,
+			school_cd,
+			grade,
+			ban,
+			enroll_st_dt,
+			enroll_ed_dt,
+			max_cnt,
+			teacher_id,			
+			input_id,
+			input_date,
+			update_id,
+			update_date
+		from
+			lecture
+		where
+			teacher_id=#{user_id}
+	</select>
 	
  
 	<!-- according to id query -->

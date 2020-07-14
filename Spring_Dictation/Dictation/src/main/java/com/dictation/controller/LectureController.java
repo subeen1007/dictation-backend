@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dictation.service.CourseService;
 import com.dictation.service.LectureService;
-import com.dictation.vo.CourseVO;
 import com.dictation.vo.LectureVO;
 
 
@@ -37,14 +35,10 @@ public class LectureController {
 	
 	@Autowired
 	private LectureService lectureService;
-	@Autowired
-	private CourseService courseService;
 
-	//강좌개설(강좌정보 + 받아쓰기정보 받아옴)
-	//강좌정보는 lecture테이블에 넣고, 받아쓰기정보는 배열로 받아와서 course테이블에 넣음
 	@CrossOrigin("*")
 	@PostMapping(produces = "application/json;charset=UTF-8")
-	public void insert_lec_cour(@RequestBody LectureVO lecture, @RequestBody CourseVO[] course) {
+	public void insert(@RequestBody LectureVO lecture) {
 		//프론트엔드 lecture_nm, grade, ban받아옴
 		//백엔드 lecture_no, school_cd 추가(enroll_st_dt는 추후에 맵퍼에서 추가)
 
@@ -59,16 +53,7 @@ public class LectureController {
 		
 		lecture.setLecture_no(lecture_no);		
 		lectureService.insert(lecture);
-		
-		//받아쓰기 정보들 DB에 저장
-		for(int i=0; i<course.length; i++) {
-			course[i].setLecture_no(lecture_no);
-			
-			//음성파일 추가해야함
-			
-			courseService.insert(course[i]);
-		
-		}
+				
 	}
 	
 	
@@ -147,6 +132,17 @@ public class LectureController {
 	    //System.out.println("지운후 user_id 세션값 :" +session.getAttribute("user_id"));
 	    //System.out.println("지운후 lecture_no 세션값 :" +session.getAttribute("lecture_no"));
 	    return "login/user_id&lecture_no";
+	}
+	
+	//선생님 본인이 개설한 강좌목록
+	@PostMapping(value="/teach_mylec")
+	public List<LectureVO> teacher_mylec(HttpServletRequest request) throws Exception {
+		
+		String user_id;
+		HttpSession session = request.getSession();
+		user_id = (String)session.getAttribute("user_id");
+				
+		return lectureService.teacher_mylec(user_id);
 	}
 		
 }
