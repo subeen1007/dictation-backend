@@ -80,9 +80,11 @@ public class CourseController {
 		
 		
 		//lecture_no을 세션값에서 가져와서 저장
-		//HttpSession session = request.getSession();
-		//int lecture_session=(int)session.getAttribute("lecture_no");		
-		//course.setLecture_no(lecture_session);
+		HttpSession session = request.getSession();
+		int lecture_session=(int)session.getAttribute("lecture_no");
+		course.setLecture_no(lecture_session);
+		System.out.println("강좌 insert!!!!");
+		//course.setLecture_no(443108);
 		
 		courseService.insert(course);
 	}
@@ -300,5 +302,51 @@ public class CourseController {
 	}
 	*/
 	
+	
+	
+	//파일 업로드를 위함(여러개의 파일)
+	@CrossOrigin("*")
+	@PostMapping(value="/fileupload_list")
+	//@ResponseStatus(HttpStatus.CREATED)//@RequestParam("file") 
+	public String upload_list(HttpServletRequest request, @RequestPart List<MultipartFile> file) throws Exception {
+		
+		if(file.isEmpty()){ //업로드할 파일이 없을 시
+            System.out.println("파일없음");
+            return "";
+        }else {
+        	
+        	for(int i=0; i<file.size(); i++) {
+        		System.out.println("file 실행 !!");
+	    		
+	    		//파일 이름가져옴(FILE_NM)
+	    		String originalfileName = file.get(i).getOriginalFilename();
+	    	
+	    		/*
+	    		String fileUrl=ServletUriComponentsBuilder.fromCurrentContextPath()
+	                    .path("/downloadFile/")
+	                    .path(originalfileName)
+	                    .toUriString();
+	            */
+	    		
+	    			
+	    		//SAVE_FILE_NM
+	    		UUID uuid =UUID.randomUUID();
+	    		String save_file_nm=uuid.toString() +"_" +originalfileName;
+	    				
+	    		//파일 지정한 경로로 저장(save_file_nm 파일이름으로 저장)
+	    		File dest = new File("C:/Temp/" + save_file_nm);
+	    		file.get(i).transferTo(dest);
+	    		
+	    		System.out.println("파일이름 : "+originalfileName);
+	    		System.out.println("새로운 파일이름 : "+save_file_nm);
+	    		//System.out.println("파일경로 : "+fileUrl);
+	    		
+
+        	}
+        	
+        }
+		
+		return "성공";
+	}
 
 }

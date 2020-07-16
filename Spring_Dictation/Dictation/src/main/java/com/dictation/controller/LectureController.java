@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.dictation.service.LectureService;
 import com.dictation.vo.LectureVO;
+import com.dictation.vo.UserVO;
 
 
 @CrossOrigin("*")
@@ -35,13 +36,19 @@ public class LectureController {
 	
 	@Autowired
 	private LectureService lectureService;
-
+	
+	//강좌 개설하기
 	@CrossOrigin("*")
 	@PostMapping(produces = "application/json;charset=UTF-8")
-	public void insert(@RequestBody LectureVO lecture) {
+	public void insert(@RequestBody LectureVO lecture, HttpServletRequest request) throws Exception {
 		//프론트엔드 lecture_nm, grade, ban받아옴
 		//백엔드 lecture_no, school_cd 추가(enroll_st_dt는 추후에 맵퍼에서 추가)
-
+		
+		HttpSession session = request.getSession();
+		UserVO user_session=(UserVO)session.getAttribute("user");
+		
+		lecture.setTeacher_id(user_session.getUser_id());
+		
 		int lecture_no=rand(7); //DB에 넣을 lecture_no칼럼값 생성(7자리 난수생성)
 		Object db_lec_no = lectureService.lecture_no_search(lecture_no); //생성한난수가 디비에 이미있는지 검사(없으면 null, 있으면 lecture_no값)
 		
@@ -49,9 +56,12 @@ public class LectureController {
 		while(db_lec_no!=null) {
 			lecture_no=rand(7);
 			db_lec_no = lectureService.lecture_no_search(lecture_no);
-		}
 		
-		lecture.setLecture_no(lecture_no);		
+		}
+		//System.out.println("여기까지 오는가");
+		lecture.setLecture_no(lecture_no);
+		System.out.println("값"+lecture_no);
+		System.out.println("반" + lecture.getBan());
 		lectureService.insert(lecture);
 				
 	}
@@ -92,7 +102,7 @@ public class LectureController {
 	}
 	
 	//All queries
-	@PostMapping(value="/list")
+	@RequestMapping(value="/list")
 	public List<LectureVO> list(){
 		return lectureService.list();
 	}
@@ -101,6 +111,8 @@ public class LectureController {
 	//나중에는 post로 lecture_no 값 줄것
 	@GetMapping(value = "/lecture_no/{lecture_no}")
 	public String lecture_no(@PathVariable("lecture_no") int lecture_no, HttpServletRequest request) throws Exception {
+		
+		System.out.println("lecture_no에 대한 세션값을 줌");
 		
 		HttpSession session = request.getSession();
 		session.setAttribute("lecture_no", lecture_no);
@@ -135,14 +147,14 @@ public class LectureController {
 	}
 	
 	//선생님 본인이 개설한 강좌목록
-	@PostMapping(value="/teach_mylec")
+	@RequestMapping(value="/teach_mylec")
 	public List<LectureVO> teacher_mylec(HttpServletRequest request) throws Exception {
-		
-		String user_id;
 		HttpSession session = request.getSession();
-		user_id = (String)session.getAttribute("user_id");
+		UserVO user_session=(UserVO)session.getAttribute("user");
+	
+		System.out.println("teach_mylec에서 user_id 세션값 : "+user_session.getUser_id());
 				
-		return lectureService.teacher_mylec(user_id);
+		return lectureService.teacher_mylec(user_session.getUser_id());
 	}
 		
 }

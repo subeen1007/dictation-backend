@@ -19,6 +19,7 @@ public class LectureVO {
 	private String enroll_ed_dt;
 	private int max_cnt;
 	private String teacher_id;
+	private String teacher_nm;
 	private String input_id;
 	private Date input_date;
 	private String update_id;
