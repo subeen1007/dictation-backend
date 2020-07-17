@@ -32,8 +32,13 @@ public class LectureService {
 		lectureMapper.update(lecture);
 	}
 	
-	public int lecture_no_search(int lecture_no) {
+	public Object lecture_no_search(int lecture_no) {
 		return lectureMapper.lecture_no_search(lecture_no);
+	}
+	
+	//선생님 본인이 개설한 강좌목록 띄우기 위한 코드
+	public List<LectureVO> teacher_mylec(String user_id) {
+		return lectureMapper.teacher_mylec(user_id);
 	}
 
 	//according to id query
