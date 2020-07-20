@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -56,6 +58,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.dictation.service.CourseService;
 import com.dictation.vo.BoardVO;
 import com.dictation.vo.CourseVO;
+import com.dictation.vo.LectureVO;
+
+import ch.qos.logback.core.pattern.parser.Parser;
 
 
 @CrossOrigin("*")
@@ -69,8 +74,10 @@ public class CourseController {
 	
 	//단계번호, 문항번호, 정답은 vue에서 가져옴(CourseVO 1개씩만 insert)
     //insert user
+	
+	@RequestMapping(produces = "application/json;charset=UTF-8")
 	@PostMapping(produces = "application/json;charset=UTF-8")
-	public void insert(@RequestBody CourseVO course,HttpServletRequest request) throws Exception{
+	public void insert(@RequestParam Map<String, Object> map,@Param(value = "file") MultipartFile file, HttpServletRequest request) throws Exception{
 		//프론트엔드에서 course_no, question_no, question 가져오기
 		
 		
@@ -82,9 +89,50 @@ public class CourseController {
 		//lecture_no을 세션값에서 가져와서 저장
 		HttpSession session = request.getSession();
 		int lecture_session=(int)session.getAttribute("lecture_no");
+		
+		int course_no=Integer.parseInt((String)map.get("course_no"));
+		int question_no=Integer.parseInt((String)map.get("question_no"));
+		String question=(String)map.get("question");
+		String originalfileName = null;
+		String save_file_nm=null;
+		
+		CourseVO course = new CourseVO();
 		course.setLecture_no(lecture_session);
-		System.out.println("강좌 insert!!!!");
-		//course.setLecture_no(443108);
+		course.setCourse_no(course_no);
+		course.setQuestion_no(question_no);
+		course.setQuestion(question);
+		
+		if(file.isEmpty()){ //업로드할 파일이 없을 시
+            System.out.println("파일없음");
+        }else {
+        	System.out.println("file 실행 !!");
+    		
+    		//파일 이름가져옴(FILE_NM)
+    		originalfileName = file.getOriginalFilename();
+    	
+    		/*
+    		String fileUrl=ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/downloadFile/")
+                    .path(originalfileName)
+                    .toUriString();
+            */
+    		
+    			
+    		//SAVE_FILE_NM
+    		UUID uuid =UUID.randomUUID();
+    		save_file_nm=uuid.toString() +"_" +originalfileName;
+    				
+    		//파일 지정한 경로로 저장(save_file_nm 파일이름으로 저장)
+    		File dest = new File("C:/Temp/" + save_file_nm);
+    		file.transferTo(dest);
+    		
+    		System.out.println("파일이름 : "+originalfileName);
+    		System.out.println("새로운 파일이름 : "+save_file_nm);
+    		//System.out.println("파일경로 : "+fileUrl);
+        }
+		
+		course.setFile_nm(originalfileName);
+		course.setSave_file_nm(save_file_nm);		
 		
 		courseService.insert(course);
 	}
