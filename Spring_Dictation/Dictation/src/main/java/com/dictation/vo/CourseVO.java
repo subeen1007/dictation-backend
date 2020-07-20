@@ -2,6 +2,8 @@ package com.dictation.vo;
 
 import java.util.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +22,7 @@ public class CourseVO {
 	private Date input_date;
 	private String update_id;
 	private Date update_date;
+	
+	//private MultipartFile file;
 	
 }
