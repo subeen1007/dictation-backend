@@ -26,6 +26,12 @@ public interface LectureMapper {	//lectureMapper.xml에서 이름,명령어 지정
 	//선생님 본인이 개설한 강좌목록 띄우기 위한 코드
 	public List<LectureVO> teacher_mylec(String user_id);
 	
+	//학생화면 전체강좌 리스트에 강좌신청여부
+	public List<LectureVO> student_lec_list(String user_id);
+	
+	//학생 본인이 수강신청해서 승인된 강좌목록 띄우기 위한 코드
+	public List<LectureVO> student_mylec(String user_id);
+	
 	//according to id query
 	public LectureVO getById(int lecture_no);
 
