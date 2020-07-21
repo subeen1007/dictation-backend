@@ -25,4 +25,6 @@ public class LectureVO {
 	private String update_id;
 	private Date update_date;
 	
+	private String approval_cd;
+	
 }

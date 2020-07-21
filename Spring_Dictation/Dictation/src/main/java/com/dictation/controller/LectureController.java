@@ -156,5 +156,27 @@ public class LectureController {
 				
 		return lectureService.teacher_mylec(user_session.getUser_id());
 	}
+	
+	//학생화면 전체강좌 리스트에 강좌신청여부
+	@RequestMapping(value="/student_lec_list")
+	public List<LectureVO> student_lec_list(HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		UserVO user_session=(UserVO)session.getAttribute("user");
+	
+		System.out.println("student_lec_list에서 user_id 세션값 : "+user_session.getUser_id());
+				
+		return lectureService.student_lec_list(user_session.getUser_id());
+	}
+	
+	//학생 본인이 수강신청해서 승인된 강좌목록 띄우기 위한 코드
+	@RequestMapping(value="/student_mylec")
+	public List<LectureVO> student_mylec(HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		//UserVO user_session=(UserVO)session.getAttribute("user");
+	
+		//System.out.println("student_mylec에서 user_id 세션값 : "+user_session.getUser_id());
+				
+		return lectureService.student_mylec("test2");
+	}
 		
 }
