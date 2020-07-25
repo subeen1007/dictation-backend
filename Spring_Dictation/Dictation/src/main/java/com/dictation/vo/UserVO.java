@@ -26,6 +26,13 @@ public class UserVO {
 	private String email;
 	private String loginYn;
 	
+	//신청현황 출력할때 필요한 변수(enroll변수)
+	private String register_dt;
+	private String approval_cd;
+	private String approval_dt;
+	private int pass_course_no;
+	private int study_time;
+	
 	//position_cd 에서 dae_cd와 so_cd값을 합치기 위한 변수
 	private String dae_p;
 	private String so_p;
