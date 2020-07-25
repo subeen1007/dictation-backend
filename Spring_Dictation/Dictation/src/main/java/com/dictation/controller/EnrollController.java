@@ -1,10 +1,12 @@
 package com.dictation.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dictation.service.CourseService;
@@ -35,7 +38,8 @@ public class EnrollController {
 	private CourseService courseService;
 	
 	
-    //insert user
+    //선생님이 insert
+	//세션값으로 insert
 	@PostMapping(produces = "application/json;charset=UTF-8")
 	public void insert(@RequestBody EnrollVO enroll, HttpServletRequest request) {
 		
@@ -46,19 +50,63 @@ public class EnrollController {
 		enrollService.insert(enroll);
 	}
 
-
-      //according to id delete
-	@GetMapping(value="/delete/{user_id}")
-	public void delete(@PathVariable("user_id") String user_id) {
-		enrollService.delete(user_id);
+    //학생들이 수강신청해서 insert
+	//세션값user_id받아와서 insert
+	//lecture_no, user_id만 있으면 됨
+	@GetMapping(value="/insert/{lecture_no}")
+	public void insert_student(@PathVariable("lecture_no") int lecture_no, HttpServletRequest request) {
+		EnrollVO enroll = new EnrollVO();
+		enroll.setLecture_no(lecture_no);
+		enroll.setApproval_cd("미승인");
+		
+		//user_id
+		HttpSession session = request.getSession();
+		UserVO user_session=(UserVO)session.getAttribute("user");
+		enroll.setUser_id(user_session.getUser_id());
+		
+		enrollService.insert(enroll);
 	}
+
+
+	//according to id delete
+	//선생님화면 delete
+	@PostMapping(value="/delete")
+	public void delete(@RequestBody EnrollVO enroll) {
+		enrollService.delete(enroll);
+	}
+	
+	//학생화면 delete
+	//세션값 user_id가져와서 delete
+	@GetMapping(value="/delete/{lecture_no}")
+	public void delete_student(@PathVariable("lecture_no") int lecture_no, HttpServletRequest request) {
+		EnrollVO enroll = new EnrollVO();
+		enroll.setLecture_no(lecture_no);
+		
+		HttpSession session = request.getSession();
+		UserVO user_session=(UserVO)session.getAttribute("user");
+		enroll.setUser_id(user_session.getUser_id());
+		
+		enrollService.delete(enroll);
+	}
+	
 	//modify
 	//user_id는 같아야 함
 	@PostMapping(value="/update")
 	public void update(@RequestBody EnrollVO enroll) { //user_id, lecture_no값 필수
 		enrollService.update(enroll);
 	}
-
+	//세션값 lecture_no가져와서 update
+	//선생님화면-신청현황-승인버튼 눌렀을때 학생을 승인시켜줌
+	@GetMapping(value="/update/{user_id}")
+	public void update_request(@PathVariable("user_id") String user_id, HttpServletRequest request) { //user_id, lecture_no값 필수
+		System.out.println("555555555");
+		//lecture_no
+		HttpSession session = request.getSession();
+		int lecture_no=(int)session.getAttribute("lecture_no");
+		System.out.println("666666666");
+		enrollService.update_request(lecture_no, user_id);
+	}
+	
 	//according to id Query students
 	@GetMapping(value="/get/{user_id}")
 	public EnrollVO getById(@PathVariable("user_id") String user_id) {
@@ -70,7 +118,16 @@ public class EnrollController {
 	@PostMapping(value="/list")
 	public List<EnrollVO> list(){
 		return enrollService.list();
-	}	
+	}
+	
+	//신청현황 리스트
+	@PostMapping(value="/list_request")
+	public List<UserVO> list_request(HttpServletRequest request){
+		//lecture_no
+		HttpSession session = request.getSession();
+		int lecture_no=(int)session.getAttribute("lecture_no");
+		return enrollService.list_request(lecture_no);
+	}
 	
 	//정답비교(학생답을 매개변수로 넣음)
 	@PostMapping(value="/answer")
