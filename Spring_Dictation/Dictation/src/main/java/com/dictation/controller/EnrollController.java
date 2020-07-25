@@ -99,11 +99,11 @@ public class EnrollController {
 	//선생님화면-신청현황-승인버튼 눌렀을때 학생을 승인시켜줌
 	@GetMapping(value="/update/{user_id}")
 	public void update_request(@PathVariable("user_id") String user_id, HttpServletRequest request) { //user_id, lecture_no값 필수
-		System.out.println("555555555");
+
 		//lecture_no
 		HttpSession session = request.getSession();
 		int lecture_no=(int)session.getAttribute("lecture_no");
-		System.out.println("666666666");
+
 		enrollService.update_request(lecture_no, user_id);
 	}
 	

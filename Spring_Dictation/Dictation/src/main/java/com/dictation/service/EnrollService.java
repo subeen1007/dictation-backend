@@ -39,7 +39,7 @@ public class EnrollService {
 		enroll.setLecture_no(lecture_no);
 		enroll.setUser_id(user_id);
 		
-		enrollMapper.update(enroll);
+		enrollMapper.update_request(enroll);
 	}
 
 	//according to id query
