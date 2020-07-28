@@ -210,15 +210,6 @@ public class BoardController {
 	
 	
 	
-	/*
-	@PostMapping("/multi-upload")
-	public ResponseEntity multiUpload(@RequestParam("files") MultipartFile[] files) {
-		List<Object> fileDownloadUrls = new ArrayList<>();
-		Arrays.asList(files)
-				.stream()
-				.forEach(file -> fileDownloadUrls.add(uploadToLocalFileSystem(file).getBody()));
-		return ResponseEntity.ok(fileDownloadUrls);
-	}
-	*/
+	
 
 }
