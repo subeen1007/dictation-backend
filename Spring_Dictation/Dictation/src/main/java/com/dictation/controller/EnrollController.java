@@ -139,7 +139,7 @@ public class EnrollController {
 		HttpSession session = request.getSession();
 		UserVO user_session=(UserVO)session.getAttribute("user");
 		String student_id = user_session.getUser_id();
-		
+		int lecture_session=(int)session.getAttribute("lecture_no");
 		
 		String question;
 		CourseVO course;
@@ -147,6 +147,7 @@ public class EnrollController {
 
 		for(int i=0; i<courseList.length; i++) {
 			question=courseList[i].getQuestion();
+			courseList[i].setLecture_no(lecture_session);
 			course=courseService.getById(courseList[i]);
 			if(question.equals(course.getQuestion())) {
 				answer[i]=true;

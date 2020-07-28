@@ -1,5 +1,6 @@
 package com.dictation.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -31,6 +32,16 @@ public class CourseService {
 	public void update(CourseVO course) {
 		courseMapper.update(course);
 	}
+	
+	//받아쓰기 정답 수정
+	public void dic_modify_question(CourseVO course) {
+		courseMapper.dic_modify_question(course);
+	}
+	
+	//받아쓰기 파일 수정
+	public void dic_modify_file(CourseVO course) {
+		courseMapper.dic_modify_file(course);
+	}
 
 	//according to id query
 	public CourseVO getById(CourseVO course) {
@@ -45,6 +56,16 @@ public class CourseService {
 	//search file_nm for file download
 	public String getFileNm(String save_file_nm) {
 		return courseMapper.getFileNm(save_file_nm);
+	}
+	
+	//강좌에 대한 받아쓰기가 등록되어 있는지 여부를 알려줌
+	public Integer dic_empty(CourseVO course) {
+		return courseMapper.dic_empty(course);
+	}
+	
+	//선생님- 받아쓰기 정답 가져옴
+	public List<CourseVO> dic_answers(CourseVO course){
+		return courseMapper.dic_answers(course);
 	}
 	
 

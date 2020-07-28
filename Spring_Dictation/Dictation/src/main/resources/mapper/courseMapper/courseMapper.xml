@@ -66,6 +66,24 @@
 			lecture_no=#{lecture_no}
 	</update>
 	
+	<!-- 받아쓰기 정답 수정-->
+	<update id="dic_modify_question" parameterType="CourseVO">
+		update course
+		set
+			question=#{question}	
+		where
+			lecture_no=#{lecture_no} and course_no=#{course_no} and question_no=#{question_no}
+	</update>
+	
+	<!-- 받아쓰기 파일 수정-->
+	<update id="dic_modify_file" parameterType="CourseVO">
+		update course
+		set
+			file_nm=#{file_nm},
+			save_file_nm=#{save_file_nm}			
+		where
+			lecture_no=#{lecture_no} and course_no=#{course_no} and question_no=#{question_no}
+	</update>
 	
  
 	<!-- according to id query -->
@@ -118,6 +136,28 @@
 			course
 		where
 			save_file_nm=#{save_file_nm}
+	</select>
+	
+	
+	<select id="dic_empty" parameterType="CourseVO" resultType="Integer">
+		select
+		EXISTS(SELECT 1 FROM course WHERE lecture_no=#{lecture_no} and course_no=#{course_no})
+			
+	</select>
+	
+	<!-- 선생님- 받아쓰기 정답 가져옴 -->
+	<select id="dic_answers" parameterType="CourseVO" resultType="com.dictation.vo.CourseVO">
+		select
+			lecture_no,
+			course_no,
+			question_no,
+			question,
+			file_nm,
+			save_file_nm
+		from
+			course
+		where
+			lecture_no=#{lecture_no} and course_no=#{course_no}
 	</select>
 </mapper>
 

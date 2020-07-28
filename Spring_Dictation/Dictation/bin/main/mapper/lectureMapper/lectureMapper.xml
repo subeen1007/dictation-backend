@@ -146,7 +146,7 @@
 	<!-- 학생 본인이 수강신청해서 승인된 강좌목록 띄우기 위한 코드 -->
 	<select id="student_mylec" parameterType="String" resultType="LectureVO">
 
-			select
+		select
 			lec.year,
 			lec.term,
 			lec.lecture_no,

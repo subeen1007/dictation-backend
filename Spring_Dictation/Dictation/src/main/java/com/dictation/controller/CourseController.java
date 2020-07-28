@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -58,7 +59,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.dictation.service.CourseService;
 import com.dictation.vo.BoardVO;
 import com.dictation.vo.CourseVO;
+import com.dictation.vo.EnrollVO;
 import com.dictation.vo.LectureVO;
+import com.dictation.vo.UserVO;
 
 import ch.qos.logback.core.pattern.parser.Parser;
 
@@ -74,7 +77,7 @@ public class CourseController {
 	
 	//단계번호, 문항번호, 정답은 vue에서 가져옴(CourseVO 1개씩만 insert)
     //insert user
-	
+	//선생님 화면-받아쓰기 등록버튼
 	@RequestMapping(produces = "application/json;charset=UTF-8")
 	@PostMapping(produces = "application/json;charset=UTF-8")
 	public void insert(@RequestParam Map<String, Object> map,@Param(value = "file") MultipartFile file, HttpServletRequest request) throws Exception{
@@ -136,9 +139,66 @@ public class CourseController {
 		
 		courseService.insert(course);
 	}
+	
+	//선생님화면- 받아쓰기 수정버튼
+	@PostMapping(value="/dic_modify")
+	public void dic_modify(@RequestParam Map<String, Object> map,@Param(value = "file_nm") MultipartFile file_nm, HttpServletRequest request) throws Exception{
+		//프론트엔드에서 course_no, question_no, question, file_nm, change_file 가져오기
+		
+		//lecture_no을 세션값에서 가져와서 저장
+		HttpSession session = request.getSession();
+		int lecture_session=(int)session.getAttribute("lecture_no");
+		
+		System.out.println("111111");
+		int course_no=Integer.parseInt((String)map.get("course_no"));
+		int question_no=Integer.parseInt((String)map.get("question_no"));
+		String question=(String)map.get("question");
+		boolean change_file2=Boolean.parseBoolean((String)map.get("change_file"));
+		String originalfileName = null;
+		String save_file_nm=null;
+		
+		CourseVO course1 = new CourseVO();
+		course1.setLecture_no(lecture_session);
+		course1.setCourse_no(course_no);
+		course1.setQuestion_no(question_no);
+		course1.setQuestion(question);
+		
+		System.out.println("22222");
+		courseService.dic_modify_question(course1);
+		System.out.println("33333");
+		if(change_file2==true) {//파일이 수정됐을떄
+			if(file_nm.isEmpty()){ //업로드할 파일이 없을 시
+	            System.out.println("파일없음");
+	        }else {
+	        	System.out.println("file 실행 !!");
+	    		
+	    		//파일 이름가져옴(FILE_NM)
+	    		originalfileName = file_nm.getOriginalFilename();
+	    			
+	    		//SAVE_FILE_NM
+	    		UUID uuid =UUID.randomUUID();
+	    		save_file_nm=uuid.toString() +"_" +originalfileName;
+	    				
+	    		//파일 지정한 경로로 저장(save_file_nm 파일이름으로 저장)
+	    		File dest = new File("C:/Temp/" + save_file_nm);
+	    		file_nm.transferTo(dest);
+	    		
+	    		System.out.println("파일이름 : "+originalfileName);
+	    		System.out.println("새로운 파일이름 : "+save_file_nm);
+	    		//System.out.println("파일경로 : "+fileUrl);
+	        }
+			CourseVO course2 = new CourseVO();
+			course2.setLecture_no(lecture_session);
+			course2.setCourse_no(course_no);
+			course2.setQuestion_no(question_no);
+			course2.setFile_nm(originalfileName);
+			course2.setSave_file_nm(save_file_nm);
+			courseService.dic_modify_file(course2);
+		}
+	}
 
 
-      //according to id delete
+    //according to id delete
 	@GetMapping(value="/delete/{lecture_no}&{course_no}&{question_no}")
 	public void delete(@PathVariable("lecture_no") int lecture_no, @PathVariable("course_no") int course_no, @PathVariable("question_no") int question_no) {
 		CourseVO course=new CourseVO();
@@ -396,5 +456,35 @@ public class CourseController {
 		
 		return "성공";
 	}
+	
+	//강좌에 대한 받아쓰기가 등록되어 있는지 여부를 알려줌
+	//선생님 화면-받아쓰기 등록: 디비에 강좌가 있으면 수정버튼이 뜨고, 강좌가 없으면 등록버튼이 뜨게하기 위함
+	//존재하면 1, 존재안하면 0
+	@GetMapping(value="/dic_empty/{course_no}")
+	public Integer dic_empty(@PathVariable("course_no") int course_no, HttpServletRequest request) {
+		CourseVO course2=new CourseVO();
+		
+		HttpSession session = request.getSession();
+		int lecture_session=(int)session.getAttribute("lecture_no");
+		course2.setLecture_no(lecture_session);
+		course2.setCourse_no(course_no);
+
+		Integer course = courseService.dic_empty(course2);
+		return course;
+	}
+	
+	//선생님- 받아쓰기 정답 가져옴
+	@GetMapping(value="/dic_answers/{course_no}")
+	public List<CourseVO> dic_answers(@PathVariable("course_no") int course_no, HttpServletRequest request) {
+		CourseVO course2=new CourseVO();
+		
+		HttpSession session = request.getSession();
+		int lecture_session=(int)session.getAttribute("lecture_no");
+		course2.setLecture_no(lecture_session);
+		course2.setCourse_no(course_no);
+
+		return courseService.dic_answers(course2);
+	}
+	
 
 }

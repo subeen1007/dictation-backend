@@ -172,11 +172,11 @@ public class LectureController {
 	@RequestMapping(value="/student_mylec")
 	public List<LectureVO> student_mylec(HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
-		//UserVO user_session=(UserVO)session.getAttribute("user");
+		UserVO user_session=(UserVO)session.getAttribute("user");
 	
-		//System.out.println("student_mylec에서 user_id 세션값 : "+user_session.getUser_id());
+		System.out.println("student_mylec에서 user_id 세션값 : "+user_session.getUser_id());
 				
-		return lectureService.student_mylec("test2");
+		return lectureService.student_mylec(user_session.getUser_id());
 	}
 		
 }

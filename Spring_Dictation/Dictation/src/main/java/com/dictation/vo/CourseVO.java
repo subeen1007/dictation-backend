@@ -23,6 +23,9 @@ public class CourseVO {
 	private String update_id;
 	private Date update_date;
 	
+	//받아쓰기 수정할때 file이 수정됐는지 알기위한 변수
+	private boolean change_file;
+	
 	//private MultipartFile file;
 	
 }
