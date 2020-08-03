@@ -49,6 +49,11 @@
 		delete from board where no=#{no} and seq_no=#{seq_no}
 	</delete>
 	
+	<!--선생님이 강좌 삭제했을때 -->
+	<delete id="lecture_delete" parameterType="int">
+		delete from board where lecture_no=#{lecture_no}
+	</delete>
+	
 	<!-- update after delete -->
 	<update id="after_delete" parameterType="Hashmap">
 		update board

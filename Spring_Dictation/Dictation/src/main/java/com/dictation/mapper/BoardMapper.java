@@ -17,6 +17,9 @@ public interface BoardMapper {	//boardMapper.xml에서 이름,명령어 지정
 
 	//according to id delete
 	public void delete(HashMap<String, Object> map);
+	
+	//선생님이 강좌 삭제했을때
+	public void lecture_delete(int lecture_no);
 
 	//update after delete
 	public void after_delete(HashMap<String, Object> map);

@@ -158,6 +158,12 @@ public class TeacherController {//선생님 컨트롤러
 			course2.setQuestion_no(question_no);
 			course2.setFile_nm(originalfileName);
 			course2.setSave_file_nm(save_file_nm);
+			
+			//기존파일 삭제
+			String delete_filenm=courseService.getById(course2).getSave_file_nm();//삭제할 파일이름
+			File delete_file=new File("C:/Temp/"+delete_filenm);//삭제할 파일
+			delete_file.delete();//파일 삭제
+			
 			courseService.dic_modify_file(course2);
 		}
 	}

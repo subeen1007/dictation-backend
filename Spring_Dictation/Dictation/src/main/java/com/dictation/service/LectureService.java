@@ -23,7 +23,7 @@ public class LectureService {
 	}
 
 	//according to id delete
-	public void delete(String lecture_no) {
+	public void delete(int lecture_no) {
 		lectureMapper.delete(lecture_no);
 	}
 
