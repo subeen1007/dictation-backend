@@ -45,6 +45,11 @@
 		delete from enroll where user_id=#{user_id} and lecture_no=#{lecture_no}
 	</delete>
  
+ 	<!-- 선생님이 강좌삭제했을때 -->
+ 	<delete id="lecture_delete" parameterType="int">
+		delete from enroll where lecture_no=#{lecture_no}
+	</delete>
+	
 	<!-- according to id Modifying Student Information-->
 	<update id="update" parameterType="EnrollVO">
 		update enroll

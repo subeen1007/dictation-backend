@@ -47,7 +47,7 @@
  
  
 	<!-- according to id Delete students -->
-	<delete id="delete" parameterType="String">
+	<delete id="delete" parameterType="int">
 		delete from lecture where lecture_no=#{lecture_no}
 	</delete>
  
@@ -55,13 +55,12 @@
 	<update id="update" parameterType="LectureVO">
 		update lecture
 		set
-			year=#{year},
-			term=#{term},
-			lecture_no=#{lecture_no},
+			year=(select year from term_cd where use_yn=1),
+			term=(select term from term_cd where use_yn=1),
 			lecture_nm=#{lecture_nm},
 			school_cd=#{school_cd},
 			grade=#{grade},
-			grade=#{ban},
+			ban=#{ban},
 			enroll_st_dt=#{enroll_st_dt},
 			enroll_ed_dt=#{enroll_ed_dt},
 			max_cnt=#{max_cnt},

@@ -28,6 +28,11 @@ public class CourseService {
 		courseMapper.delete(course);
 	}
 
+	//선생님이 강좌삭제했을때
+	public void lecture_delete(int lecture_no) {
+		courseMapper.lecture_delete(lecture_no);
+	}
+	
 	//according to user Of id modify
 	public void update(CourseVO course) {
 		courseMapper.update(course);

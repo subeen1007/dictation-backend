@@ -44,6 +44,13 @@
 		where
 			lecture_no=#{lecture_no} and course_no=#{course_no} and question_no=#{question_no}
 	</delete>
+	
+	<!-- 선생님이 강좌삭제했을때 --> 
+	<delete id="lecture_delete" parameterType="int">
+		delete from course 
+		where
+			lecture_no=#{lecture_no}
+	</delete>
  
 	<!-- according to id Modifying Student Information-->
 	<update id="update" parameterType="CourseVO">

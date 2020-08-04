@@ -28,6 +28,11 @@ public class EnrollService {
 		enrollMapper.delete(enroll);
 	}
 
+	//선생님이 강좌삭제했을때
+	public void lecture_delete(int lecture_no) {
+		enrollMapper.lecture_delete(lecture_no);
+	}
+		
 	//according to user Of id modify
 	public void update(EnrollVO enroll) {		
 		enrollMapper.update(enroll);

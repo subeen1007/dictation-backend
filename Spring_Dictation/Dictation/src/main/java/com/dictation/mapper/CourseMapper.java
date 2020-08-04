@@ -17,6 +17,9 @@ public interface CourseMapper {	//courseMapper.xml에서 이름,명령어 지정
 
 	//according to id delete
 	public void delete(CourseVO course);	//일단은 lecture_no을 통해 삭제가능하도록 했음.
+	
+	//선생님이 강좌삭제했을때
+	public void lecture_delete(int lecture_no);
 
 	//according to user Of id modify
 	public void update(CourseVO course);

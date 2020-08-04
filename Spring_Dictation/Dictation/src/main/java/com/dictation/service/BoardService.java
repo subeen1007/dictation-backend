@@ -28,8 +28,12 @@ public class BoardService {
 		boardMapper.delete(map);
 	}
 	
-	//update after delete
+	//선생님이 강좌 삭제했을때
+	public void lecture_delete(int lecture_no) {
+		boardMapper.lecture_delete(lecture_no);
+	}
 	
+	//update after delete
 	public void after_delete(HashMap<String, Object> map) { 
 		boardMapper.after_delete(map); 
 	}

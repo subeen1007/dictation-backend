@@ -27,6 +27,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -104,11 +105,30 @@ public class DictationController {//받아쓰기 컨트롤러
 		
 	}
 	
+	//학생이 받아쓰기 진행할때 음성파일 재생을 위한 음성파일url
+	@PostMapping(value="/course/audio")
+	public String audio(@Param(value = "course_no") int course_no, @Param(value = "question_no") int question_no,
+			HttpServletRequest request) {
+	
+		HttpSession session = request.getSession();
+		int lecture_session=(int)session.getAttribute("lecture_no");
+		
+		CourseVO course=new CourseVO();
+		course.setLecture_no(lecture_session);
+		course.setCourse_no(course_no);
+		course.setQuestion_no(question_no);
+		
+		String savefile_nm=courseService.getById(course).getSave_file_nm();
+		String url="C:/Temp/"+savefile_nm; // "C:/Temp/"은 추후에 서버에 파일저장 경로로 바꿀것
+		//System.out.println("url주소??"+url);
+		return url;
+	}
+	
 	//학생이 받아쓰기를 진행할때 음성파일 클릭시 음성나오도록 구현
 	//.wav에서 test성공, .mp3에선 작동안함(+post로 경로값 받아올것) 
 	@GetMapping(value="/course/sound")
 	public void soundPlay() {
-		File file = new File("C:\\Users\\subin\\Desktop\\딕테이션_프로젝트\\각종문서\\(남성)흐흐흐흐.wav");
+		File file = new File("C:\\Users\\subin\\Desktop\\딕테이션_프로젝트\\각종문서\\(남성)흐흐흐흐1.wav");
 		AudioInputStream audioInputStream =null;
 		SourceDataLine auline =null;
 		

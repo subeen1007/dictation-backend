@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dictation.service.BoardService;
 import com.dictation.service.CourseService;
 import com.dictation.service.EnrollService;
 import com.dictation.service.LectureService;
@@ -40,6 +41,8 @@ public class CommonController {//공통컨트롤러
 	private LectureService lectureService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private BoardService boardService;
 	
 	//회원가입
 	@PostMapping(produces = "application/json;charset=UTF-8",value="/signup")
@@ -242,8 +245,13 @@ public class CommonController {//공통컨트롤러
 	}
 	
 	//according to id delete
+	//lecture를 지우면 DB에 해당lecture_no이 존재하는 모든 데이터를 지워야함(board, course, enroll, study, lecture) 
 	@GetMapping(value="/lecture/delete/{lecture_no}")
-	public void delete(@PathVariable("lecture_no") String lecture_no) {
+	public void delete(@PathVariable("lecture_no") int lecture_no) {
+
+		boardService.lecture_delete(lecture_no);
+		enrollService.lecture_delete(lecture_no);
+		courseService.lecture_delete(lecture_no);
 		lectureService.delete(lecture_no);
 	}
 	//modify
