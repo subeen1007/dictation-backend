@@ -96,6 +96,39 @@ public class StudentController {//학생 컨트롤러
 		return lectureService.student_mylec(user_session.getUser_id());
 	}
 	
+	//학생이 통과한 단계번호 반환
+	@GetMapping(value="/enroll/what_pass_course")
+	public Integer what_pass_course(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		UserVO user_session = (UserVO)session.getAttribute("user");
+		int lecture_session=(int)session.getAttribute("lecture_no");
+		
+		EnrollVO enroll=new EnrollVO();
+		enroll.setUser_id(user_session.getUser_id());
+		enroll.setLecture_no(lecture_session);
+		
+		return enrollService.what_pass_course(enroll);
+	}
+	
+	//학생이 통과한 단계번호 업데이트
+	@GetMapping(value="/enroll/update/{course_step}")
+	public void enroll_update(@PathVariable("course_step") int course_step, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		UserVO user_session = (UserVO)session.getAttribute("user");
+		int lecture_session=(int)session.getAttribute("lecture_no");
+		Integer pass_course;//통과한 단계번호
+		
+		EnrollVO enroll=new EnrollVO();
+		enroll.setUser_id(user_session.getUser_id());
+		enroll.setLecture_no(lecture_session);
+		pass_course=enrollService.what_pass_course(enroll);
+		
+		//통과한 단계번호 update
+		if(pass_course<course_step || pass_course==null) {
+			enroll.setPass_course_no(course_step);
+			enrollService.update(enroll);
+		}
+	}
 	
 
 }

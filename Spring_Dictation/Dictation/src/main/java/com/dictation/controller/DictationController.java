@@ -89,18 +89,18 @@ public class DictationController {//받아쓰기 컨트롤러
 		EnrollVO enroll=new EnrollVO();
 		enroll.setLecture_no(courseList[1].getLecture_no());
 		enroll.setUser_id(student_id);
-		
-		//점수(추후에 점수표기가 아닌 단계표기할때 삭제할 예정)
+
 		int score=0;
 		for(int i=0; i<answer.length; i++) {
 			if(answer[i]==true) {
 				score+=10;
 			}
 		}
-		enroll.setPass_course_no(score);//일단은 점수로 표기(추후에 단계로 표시할 예정)
+	
+		//enroll.setPass_course_no(score);//일단은 점수로 표기(추후에 단계로 표시할 예정)
 		
 		//enroll.setUser_id("vv");//임시 아이디(user_id가 기존 enroll에 있어야함)
-		enrollService.update(enroll);
+		//enrollService.update(enroll);
 		return answer;
 		
 	}

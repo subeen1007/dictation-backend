@@ -29,6 +29,9 @@ public interface EnrollMapper {	//enrollMapper.xml에서 이름,명령어 지정
 
 	//according to id query
 	public EnrollVO getById(String user_id);	//일단은 user_id 넣음.
+	
+	//해당 강좌에 대해 학생이 통과한 단계번호 알기위함
+	public Integer what_pass_course(EnrollVO enroll);
 
 	//All queries
 	public List<EnrollVO> list();

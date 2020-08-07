@@ -51,6 +51,11 @@ public class EnrollService {
 	public EnrollVO getById(String user_id) {
 		return enrollMapper.getById(user_id);
 	}
+	
+	//해당 강좌에 대해 학생이 통과한 단계번호 알기위함
+	public Integer what_pass_course(EnrollVO enroll) {
+		return enrollMapper.what_pass_course(enroll);
+	}
 
 	//All queries
 	public List<EnrollVO> list(){

@@ -31,7 +31,7 @@ public interface BoardMapper {	//boardMapper.xml에서 이름,명령어 지정
 	public BoardVO getById(HashMap<String, Object> map);
 
 	//All queries
-	public List<BoardVO> list();
+	public List<BoardVO> list(BoardVO board);
 	
 	//search file_nm for file download
 	public String getFileNm(String save_file_nm);

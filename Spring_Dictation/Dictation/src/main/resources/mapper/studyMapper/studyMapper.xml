@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dictation.mapper.StudyMapper"> 
+	
+	<!-- Insert a Study -->
+	<insert id="insert" parameterType="com.dictation.vo.StudyVO">
+		insert into study(
+			year,
+			term,
+			lecture_no,
+			user_id,
+			course_no,
+			question_no,
+			seq_no,
+			answer,
+			system_time,
+			correct_yn,
+			update_id,
+			update_date	
+		) values(
+			(select year from term_cd where use_yn=1),
+			(select term from term_cd where use_yn=1),
+			#{lecture_no},
+			#{user_id},
+			#{course_no},
+			#{question_no},
+			#{seq_no},
+			#{answer},
+			#{system_time},
+			#{correct_yn},
+			#{update_id},
+			#{update_date}
+		)
+	</insert>
+ 
+ 
+	<!-- according to id Modifying Student Information-->
+	<update id="update" parameterType="StudyVO">
+		update study
+		set		
+			year=#{year},
+			term=#{term},
+			lecture_no=#{lecture_no},
+			user_id=#{user_id},
+			course_no=#{course_no},
+			question_no=#{question_no},
+			seq_no=#{seq_no},
+			answer=#{answer},
+			system_time=#{system_time},
+			correct_yn=#{correct_yn},
+			update_id=#{update_id},
+			update_date=#{update_date}
+		where
+			seq_no=#{seq_no}
+	</update>
+	
+	
+ 
+	<!-- according to id query -->
+	<select id="getById" parameterType="int" resultType="StudyVO">
+		select
+			year,
+			term,
+			lecture_no,
+			user_id,
+			course_no,
+			question_no,
+			seq_no,
+			answer,
+			system_time,
+			correct_yn,
+			update_id,
+			update_date
+		from
+			study
+		where
+			seq_no=#{seq_no}
+	</select>
+	
+	
+ 
+	<!-- Query all -->
+	<select id="list" parameterType="int" resultType="com.dictation.vo.StudyVO">
+		select
+			year,
+			term,
+			lecture_no,
+			user_id,
+			course_no,
+			question_no,
+			seq_no,
+			answer,
+			system_time,
+			correct_yn,
+			update_id,
+			update_date
+		from
+			study
+	</select> 
+	
+
+</mapper>
+
