@@ -2,160 +2,159 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dictation.mapper.EnrollMapper"> 
-	
-	<!-- Insert a enroll -->
-	<insert id="insert" parameterType="com.dictation.vo.EnrollVO">
-		insert into enroll(
-			year,
-			term,
-			lecture_no,
-			user_id,
-			register_dt,
-			approval_cd,
-			approval_dt,
-			pass_course_no,
-			study_time,
-			input_id,
-			input_date,
-			update_id,
-			update_date
-			
-		) values(
-			(select year from term_cd where use_yn=1::VARCHAR),
-			(select term from term_cd where use_yn=1::VARCHAR),
-			#{lecture_no},
-			#{user_id},
-			#{register_dt},
-			#{approval_cd},
-			#{approval_dt},
-			#{pass_course_no},
-			#{study_time},
-			#{input_id},
-			#{input_date},
-			#{update_id},
-			#{update_date}
-		)
-	</insert>
+   
+   <!-- Insert a enroll -->
+   <insert id="insert" parameterType="com.dictation.vo.EnrollVO">
+      insert into enroll(
+         year,
+         term,
+         lecture_no,
+         user_id,
+         register_dt,
+         approval_cd,
+         approval_dt,
+         pass_course_no,
+         study_time,
+         input_id,
+         input_date,
+         update_id,
+         update_date
+         
+      ) values(
+         (select year from term_cd where use_yn=1::VARCHAR),
+         (select term from term_cd where use_yn=1::VARCHAR),
+         #{lecture_no},
+         #{user_id},
+         #{register_dt},
+         #{approval_cd},
+         #{approval_dt},
+         #{pass_course_no},
+         #{study_time},
+         #{input_id},
+         #{input_date},
+         #{update_id},
+         #{update_date}
+      )
+   </insert>
  
  
  
  
-	<!-- according to id Delete students -->
-	<delete id="delete" parameterType="EnrollVO">
-		delete from enroll where user_id=#{user_id} and lecture_no=#{lecture_no}
-	</delete>
+   <!-- according to id Delete students -->
+   <delete id="delete" parameterType="EnrollVO">
+      delete from enroll where user_id=#{user_id} and lecture_no=#{lecture_no}
+   </delete>
  
- 	<!-- 선생님이 강좌삭제했을때 -->
- 	<delete id="lecture_delete" parameterType="int">
-		delete from enroll where lecture_no=#{lecture_no}
-	</delete>
-	
-	<!-- according to id Modifying Student Information-->
-	<update id="update" parameterType="EnrollVO">
-		update enroll
-		set
-			pass_course_no=#{pass_course_no},
-			study_time=#{study_time},
-			input_id=#{input_id},
-			input_date=#{input_date},
-			update_id=#{update_id},
-			update_date=#{update_date}
-		where
-			user_id=#{user_id} and lecture_no=#{lecture_no}
-	</update>
-	
-	<!-- 선생님이 학생을 승인시켜줌 -->
-	<update id="update_request" parameterType="EnrollVO">
-		update enroll
-		set
-			approval_cd='승인'
-		where
-			user_id=#{user_id} and lecture_no=#{lecture_no}
-	</update>
-	
+    <!-- 선생님이 강좌삭제했을때 -->
+    <delete id="lecture_delete" parameterType="int">
+      delete from enroll where lecture_no=#{lecture_no}
+   </delete>
+   
+   <!-- according to id Modifying Student Information-->
+   <update id="update" parameterType="EnrollVO">
+      update enroll
+      set
+         pass_course_no=#{pass_course_no},
+         study_time=#{study_time},
+         input_id=#{input_id},
+         input_date=#{input_date},
+         update_id=#{update_id},
+         update_date=#{update_date}
+      where
+         user_id=#{user_id} and lecture_no=#{lecture_no}
+   </update>
+   
+   <!-- 선생님이 학생을 승인시켜줌 -->
+   <update id="update_request" parameterType="EnrollVO">
+      update enroll
+      set
+         approval_cd='승인'
+      where
+         user_id=#{user_id} and lecture_no=#{lecture_no}
+   </update>
+   
  
-	<!-- according to id query -->
-	<select id="getById" parameterType="String" resultType="EnrollVO">
-		select
-			year,
-			term,
-			lecture_no,
-			user_id,
-			register_dt,
-			approval_cd,
-			approval_dt,
-			pass_course_no,
-			study_time,
-			input_id,
-			input_date,
-			update_id,
-			update_date
-		from
-			enroll
-		where
-			user_id=#{user_id}
-	</select>
-	
-	<!-- 해당 강좌에 대해 학생이 통과한 단계번호 알기위함 -->
-	<select id="what_pass_course" parameterType="EnrollVO" resultType="Integer">
-		select
-			pass_course_no
-		from
-			enroll
-		where
-			user_id=#{user_id} and lecture_no=#{lecture_no}
-	</select>
-	
-	
+   <!-- according to id query -->
+   <select id="getById" parameterType="String" resultType="EnrollVO">
+      select
+         year,
+         term,
+         lecture_no,
+         user_id,
+         register_dt,
+         approval_cd,
+         approval_dt,
+         pass_course_no,
+         study_time,
+         input_id,
+         input_date,
+         update_id,
+         update_date
+      from
+         enroll
+      where
+         user_id=#{user_id}
+   </select>
+   
+   <!-- 해당 강좌에 대해 학생이 통과한 단계번호 알기위함 -->
+   <select id="what_pass_course" parameterType="EnrollVO" resultType="Integer">
+      select
+         COALESCE(pass_course_no,0)
+      from
+         enroll
+      where
+         user_id=#{user_id} and lecture_no=#{lecture_no}
+   </select>
+   
+   
  
-	<!-- Query all -->
-	<select id="list" parameterType="int" resultType="com.dictation.vo.EnrollVO">
-		select
-			year,
-			term,
-			lecture_no,
-			user_id,
-			register_dt,
-			approval_cd,
-			approval_dt,
-			pass_course_no,
-			study_time,
-			input_id,
-			input_date,
-			update_id,
-			update_date
-		from
-			enroll
-	</select> 
-	
-	<!-- 신청현황 리스트 -->
-	<select id="list_request" parameterType="int" resultType="UserVO">
-		select
-			en.register_dt,
-			en.approval_cd,
-			en.approval_dt,
-			en.pass_course_no,
-			en.study_time,
-			u.user_id,
-			u.pw,
-			u.school_cd,
-			u.position_cd,
-			u.kor_nm,
-			u.end_nm,
-			u.grade,
-			u.ban,
-			u.birth_dt,
-			u.cel_phone_no,
-			u.hom_phone_no,
-			u.gender_cd,
-			u.email
-		from
-			users as u
-		right outer join
-			(select * from enroll where lecture_no=#{lecture_no}) as en
-		on
-			en.user_id=u.user_id		
+   <!-- Query all -->
+   <select id="list" parameterType="int" resultType="com.dictation.vo.EnrollVO">
+      select
+         year,
+         term,
+         lecture_no,
+         user_id,
+         register_dt,
+         approval_cd,
+         approval_dt,
+         pass_course_no,
+         study_time,
+         input_id,
+         input_date,
+         update_id,
+         update_date
+      from
+         enroll
+   </select> 
+   
+   <!-- 신청현황 리스트 -->
+   <select id="list_request" parameterType="int" resultType="UserVO">
+      select
+         en.register_dt,
+         en.approval_cd,
+         en.approval_dt,
+         en.pass_course_no,
+         en.study_time,
+         u.user_id,
+         u.pw,
+         u.school_cd,
+         u.position_cd,
+         u.kor_nm,
+         u.end_nm,
+         u.grade,
+         u.ban,
+         u.birth_dt,
+         u.cel_phone_no,
+         u.hom_phone_no,
+         u.gender_cd,
+         u.email
+      from
+         users as u
+      right outer join
+         (select * from enroll where lecture_no=#{lecture_no}) as en
+      on
+         en.user_id=u.user_id      
 
-	</select> 
+   </select> 
 </mapper>
-
