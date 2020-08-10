@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dictation.mapper.CourseMapper;
 import com.dictation.service.CourseService;
 import com.dictation.service.EnrollService;
 import com.dictation.service.LectureService;
@@ -169,20 +170,13 @@ public class TeacherController {//선생님 컨트롤러
 	}
 	
 	
-	//강좌에 대한 받아쓰기가 등록되어 있는지 여부를 알려줌
-	//선생님 화면-받아쓰기 등록: 디비에 강좌가 있으면 수정버튼이 뜨고, 강좌가 없으면 등록버튼이 뜨게하기 위함
-	//존재하면 1, 존재안하면 0
-	@GetMapping(value="/course/dic_empty/{course_no}")
-	public String dic_empty(@PathVariable("course_no") int course_no, HttpServletRequest request) {
-		CourseVO course2=new CourseVO();
+	//선생님화면 등록한 받아쓰기 최대단계
+	@GetMapping(value="/course/max_dic_course")
+	public int max_dic_course(HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
 		int lecture_session=(int)session.getAttribute("lecture_no");
-		course2.setLecture_no(lecture_session);
-		course2.setCourse_no(course_no);
-
-		String course = courseService.dic_empty(course2);
-		return course;
+		return courseService.max_dic_course(lecture_session);
 	}
 	
 	//선생님- 받아쓰기 정답 가져옴
@@ -194,7 +188,8 @@ public class TeacherController {//선생님 컨트롤러
 		int lecture_session=(int)session.getAttribute("lecture_no");
 		course2.setLecture_no(lecture_session);
 		course2.setCourse_no(course_no);
-
+		
+		System.out.println("this is dic_answer, i am finish_yn: "+ courseService.dic_answers(course2).get(1).getFinish_yn());
 		return courseService.dic_answers(course2);
 	}
 	
