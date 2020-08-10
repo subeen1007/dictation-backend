@@ -116,7 +116,7 @@
 	
  
 	<!-- Query all -->
-	<select id="list" parameterType="int" resultType="com.dictation.vo.BoardVO">
+	<select id="list" parameterType="BoardVO" resultType="com.dictation.vo.BoardVO">
 		select
 			year,
 			term,
@@ -135,6 +135,8 @@
 			update_date
 		from
 			board
+		where
+			lecture_no=#{lecture_no} and board_cd=#{board_cd}
 	</select> 
 	
 	<select id="getFileNm" parameterType="String" resultType="String">
