@@ -20,8 +20,8 @@
 			update_date
 			
 		) values(
-			(select year from term_cd where use_yn=1),
-			(select term from term_cd where use_yn=1),
+			(select year from term_cd where use_yn=1::VARCHAR),
+			(select term from term_cd where use_yn=1::VARCHAR),
 			#{lecture_no},
 			#{course_no},
 			#{question_no},
@@ -146,7 +146,8 @@
 	</select>
 	
 	
-	<select id="dic_empty" parameterType="CourseVO" resultType="Integer">
+	<select id="dic_empty" parameterType="CourseVO" resultType="string">
+	
 		select
 		EXISTS(SELECT 1 FROM course WHERE lecture_no=#{lecture_no} and course_no=#{course_no})
 			

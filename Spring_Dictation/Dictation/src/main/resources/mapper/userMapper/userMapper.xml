@@ -5,7 +5,7 @@
 	
 	<!-- Insert a user -->
 	<insert id="insert" parameterType="com.dictation.vo.UserVO">
-		insert into user(
+		insert into users(
 			user_id,
 			pw,
 			school_cd,
@@ -23,15 +23,15 @@
 			#{user_id},
 			#{pw},
 			#{school_cd},
-			(select concat(dae_cd, so_cd) from so_cd where dae_cd=#{dae_p} and so_cd=#{so_p} and use_yn=1),
+			(select concat(dae_cd, so_cd)::VARCHAR from "so_cd" where "dae_cd"=#{dae_p} and "so_cd"=#{so_p} and "use_yn"=1::VARCHAR),
 			#{kor_nm},
 			#{end_nm},
 			#{grade},
-			#{ban},
+			#{ban}, 
 			#{birth_dt},
 			#{cel_phone_no},
 			#{hom_phone_no},
-			(select concat(dae_cd, so_cd) from so_cd where dae_cd=#{dae_g} and so_cd=#{so_g} and use_yn=1),
+			(select concat(dae_cd, so_cd) from "so_cd" where"dae_cd"=#{dae_p} and "so_cd"=#{so_p} and "use_yn"=1::VARCHAR),
 			#{email}
 		)
 	</insert>
@@ -41,13 +41,13 @@
  
 	<!-- according to id Delete students -->
 	<delete id="delete" parameterType="String">
-		delete from user where user_id=#{user_id}
+		delete from users where user_id=#{user_id}
 	</delete>
  
  
 	<!-- according to id Modifying Student Information-->
 	<update id="update" parameterType="UserVO">
-		update user
+		update users
 		set
 			pw=#{pw},
 			school_cd=#{school_cd}
@@ -74,7 +74,7 @@
 			gender_cd,
 			email
 		from
-			user
+			users
 		where
 			user_id=#{user_id}
 	</select>
@@ -98,7 +98,7 @@
 			gender_cd,
 			email
 		from
-			user
+			users
 	</select> 
 </mapper>
 
