@@ -261,11 +261,13 @@ public class CommonController {//공통컨트롤러
 		lectureService.update(lecture);
 	}
 
-	//lecture_no변수 int형으로 바꿀것
 	//according to id Query students
-	@GetMapping(value="/lecture/get/{lecture_no}")
-	public LectureVO getById(@PathVariable("lecture_no") int lecture_no) {
-		LectureVO lecture = lectureService.getById(lecture_no);
+	@GetMapping(value="/lecture/get")
+	public LectureVO getById(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		int lecture_session=(int)session.getAttribute("lecture_no");
+		
+		LectureVO lecture = lectureService.getById(lecture_session);
 		return lecture;
 	}
 	

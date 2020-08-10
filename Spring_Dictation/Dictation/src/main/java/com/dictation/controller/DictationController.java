@@ -41,10 +41,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dictation.service.CourseService;
 import com.dictation.service.EnrollService;
-
+import com.dictation.service.StudyService;
 import com.dictation.vo.CourseVO;
 import com.dictation.vo.EnrollVO;
 import com.dictation.vo.LectureVO;
+import com.dictation.vo.StudyVO;
 import com.dictation.vo.UserVO;
 
 @CrossOrigin("*")
@@ -55,7 +56,22 @@ public class DictationController {//받아쓰기 컨트롤러
 	private CourseService courseService;
 	@Autowired
 	private EnrollService enrollService;
+	@Autowired
+	private StudyService studyService;
 
+	//선생님화면 받아쓰기 완료버튼 누름
+	@GetMapping(value="/course/finish_yes/{course_no}")
+	public void finish_yes(@PathVariable("course_no") int course_no, HttpServletRequest request) {
+		CourseVO course = new CourseVO();
+		course.setCourse_no(course_no);
+		
+		HttpSession session = request.getSession();
+		int lecture_session=(int)session.getAttribute("lecture_no");
+		course.setLecture_no(lecture_session);
+		course.setFinish_yn("1");
+		
+		courseService.finish_yes(course);
+	}
 	
 	//받아쓰기 정답비교(학생답을 매개변수로 넣음)
 	@PostMapping(value="/enroll/answer")
@@ -103,6 +119,14 @@ public class DictationController {//받아쓰기 컨트롤러
 		//enrollService.update(enroll);
 		return answer;
 		
+	}
+	
+	//학생의 받아쓰기 데이터를 Study테이블에 insert
+	@PostMapping(value="/study/insert")
+	public void study_insert(@RequestBody StudyVO study, HttpServletRequest request) {	
+		HttpSession session = request.getSession();
+		int lecture_session=(int)session.getAttribute("lecture_no");
+		studyService.insert(study);
 	}
 	
 	//학생이 받아쓰기 진행할때 음성파일 재생을 위한 음성파일url

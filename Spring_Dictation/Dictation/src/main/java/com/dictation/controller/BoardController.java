@@ -56,7 +56,6 @@ public class BoardController {
     //insert user
 	@PostMapping(produces = "application/json;charset=UTF-8")
 	public void insert(@RequestBody BoardVO board,HttpServletRequest request) throws Exception{
-
 		System.out.println("111111");
 		int lecture_no;
 		String so_b = null;
@@ -68,17 +67,17 @@ public class BoardController {
 		lecture_no=(int)session.getAttribute("lecture_no");
 		System.out.println(lecture_no);
 		board.setLecture_no(lecture_no);
-		//lecture_no=board.getLecture_no();//ì„ì‹œ
+		//lecture_no=board.getLecture_no();//ÀÓ½Ã
 		System.out.println("33333");
 		//board_cd, no
 		board.setDae_b("006");
-		if(board.getBoard_cd().equals("001")) {//í”„ë¡ íŠ¸ì—ì„œ ê³µì§€ì‚¬í•­ì´ë©´ 001ë¡œ ë°ì´í„° ê°’ì„ ë„˜ê¹€  
+		if(board.getBoard_cd().equals("001")) {//ÇÁ·ĞÆ®¿¡¼­ °øÁö»çÇ×ÀÌ¸é 001·Î µ¥ÀÌÅÍ °ªÀ» ³Ñ±è  
 			so_b="001";
 			no=lecture_no+"001";
-		}else if(board.getBoard_cd().equals("002")) {//í”„ë¡ íŠ¸ì—ì„œ í•™ìŠµìë£Œì´ë©´ 002ë¡œ ë°ì´í„° ê°’ì„ ë„˜ê¹€
+		}else if(board.getBoard_cd().equals("002")) {//ÇÁ·ĞÆ®¿¡¼­ ÇĞ½ÀÀÚ·áÀÌ¸é 002·Î µ¥ÀÌÅÍ °ªÀ» ³Ñ±è
 			so_b="002";
 			no=lecture_no+"002";
-		}else if(board.getBoard_cd().equals("002")) {////í”„ë¡ íŠ¸ì—ì„œ Q&Aì´ë©´ 003ë¡œ ë°ì´í„° ê°’ì„ ë„˜ê¹€
+		}else if(board.getBoard_cd().equals("002")) {////ÇÁ·ĞÆ®¿¡¼­ Q&AÀÌ¸é 003·Î µ¥ÀÌÅÍ °ªÀ» ³Ñ±è
 			so_b="003";
 			no=lecture_no+"003";
 		}
@@ -102,7 +101,7 @@ public class BoardController {
 	}
 	
 	//modify
-	//seq_noëŠ” ê°™ì•„ì•¼ í•¨
+	//seq_no´Â °°¾Æ¾ß ÇÔ
 	@PostMapping(value="/update")
 	public void update(@RequestBody BoardVO board) {
 		boardService.update(board);
@@ -118,8 +117,8 @@ public class BoardController {
 		return board;
 	}
 	
-	//í•´ë‹¹ ê²Œì‹œíŒì˜ ì „ì²´ ëª©ë¡ì„ ê°€ì ¸ì˜´
-	//lecture_no, board_cdí•„ìš”(í”„ë¡ íŠ¸ì—ì„  board_cdê°’ë§Œ í•„ìš”)
+	//ÇØ´ç °Ô½ÃÆÇÀÇ ÀüÃ¼ ¸ñ·ÏÀ» °¡Á®¿È
+	//lecture_no, board_cdÇÊ¿ä(ÇÁ·ĞÆ®¿¡¼± board_cd°ª¸¸ ÇÊ¿ä)
 	@GetMapping(value="/list/{board_cd}")
 	public List<BoardVO> list(@PathVariable("board_cd") String board_cd, HttpServletRequest request) throws Exception{
 		HttpSession session = request.getSession();
@@ -145,8 +144,8 @@ public class BoardController {
 
 
 		 
-		// ì‹¤ì œ êµ¬ë™í• ë•Œ(ì„œë²„ì— íŒŒì¼ì €ì¥????)
-		// http://localhost:3003/files/download/a.txtì²˜ëŸ¼ ì„œë²„ì— ì €ì¥í• ë•Œ ì‚¬ìš©
+		// ½ÇÁ¦ ±¸µ¿ÇÒ¶§(¼­¹ö¿¡ ÆÄÀÏÀúÀå????)
+		// http://localhost:3003/files/download/a.txtÃ³·³ ¼­¹ö¿¡ ÀúÀåÇÒ¶§ »ç¿ë
 		/*String fileDownloadUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
 				.path("/files/download/")
 				.toUriString();
@@ -181,17 +180,17 @@ public class BoardController {
 				.toUriString();
 		*/
 		
-	    String file_name= save_file_nm; //ì €ì¥ëœ íŒŒì¼ì´ë¦„
-	    String fileUrl=file_path+file_name; //ì €ì¥ëœ íŒŒì¼ url
+	    String file_name= save_file_nm; //ÀúÀåµÈ ÆÄÀÏÀÌ¸§
+	    String fileUrl=file_path+file_name; //ÀúÀåµÈ ÆÄÀÏ url
 	    
 	    File file = new File(fileUrl);
 	    if (!file.exists()) {
             return;
         }
 	    
-	    String origin_file_nm; //íŒŒì¼ ì›ë˜ì´ë¦„
+	    String origin_file_nm; //ÆÄÀÏ ¿ø·¡ÀÌ¸§
 	    System.out.println(file_name);
-	    if((origin_file_nm=boardService.getFileNm(file_name))==null) { //ë””ë¹„ì— ì›ë˜ íŒŒì¼ëª…ì´ ì—†ì„ë•Œ
+	    if((origin_file_nm=boardService.getFileNm(file_name))==null) { //µğºñ¿¡ ¿ø·¡ ÆÄÀÏ¸íÀÌ ¾øÀ»¶§
 	    	origin_file_nm=file_name;
 	    }
 	    System.out.println(origin_file_nm);
