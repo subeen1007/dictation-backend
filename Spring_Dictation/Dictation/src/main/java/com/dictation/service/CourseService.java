@@ -48,6 +48,11 @@ public class CourseService {
 		courseMapper.dic_modify_file(course);
 	}
 
+	//선생님 받아쓰기 완료버튼
+	public void finish_yes(CourseVO course) {
+		courseMapper.finish_yes(course);
+	}
+	
 	//according to id query
 	public CourseVO getById(CourseVO course) {
 		return courseMapper.getById(course);
@@ -63,9 +68,9 @@ public class CourseService {
 		return courseMapper.getFileNm(save_file_nm);
 	}
 	
-	//강좌에 대한 받아쓰기가 등록되어 있는지 여부를 알려줌
-	public String dic_empty(CourseVO course) {
-		return courseMapper.dic_empty(course);
+	//선생님화면 등록한 받아쓰기 최대단계
+	public int max_dic_course(int lecture_no) {
+		return courseMapper.max_dic_course(lecture_no);
 	}
 	
 	//선생님- 받아쓰기 정답 가져옴
