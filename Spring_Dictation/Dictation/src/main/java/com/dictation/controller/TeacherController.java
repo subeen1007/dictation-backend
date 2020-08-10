@@ -173,7 +173,7 @@ public class TeacherController {//선생님 컨트롤러
 	//선생님 화면-받아쓰기 등록: 디비에 강좌가 있으면 수정버튼이 뜨고, 강좌가 없으면 등록버튼이 뜨게하기 위함
 	//존재하면 1, 존재안하면 0
 	@GetMapping(value="/course/dic_empty/{course_no}")
-	public Integer dic_empty(@PathVariable("course_no") int course_no, HttpServletRequest request) {
+	public String dic_empty(@PathVariable("course_no") int course_no, HttpServletRequest request) {
 		CourseVO course2=new CourseVO();
 		
 		HttpSession session = request.getSession();
@@ -181,7 +181,7 @@ public class TeacherController {//선생님 컨트롤러
 		course2.setLecture_no(lecture_session);
 		course2.setCourse_no(course_no);
 
-		Integer course = courseService.dic_empty(course2);
+		String course = courseService.dic_empty(course2);
 		return course;
 	}
 	

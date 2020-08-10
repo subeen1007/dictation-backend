@@ -56,16 +56,19 @@ public class BoardController {
     //insert user
 	@PostMapping(produces = "application/json;charset=UTF-8")
 	public void insert(@RequestBody BoardVO board,HttpServletRequest request) {
+		System.out.println("111111");
 		int lecture_no;
 		String so_b = null;
 		String no = null;
 		
+		System.out.println("22222");
 		//lecture_no
-		//HttpSession session = request.getSession();
-		//lecture_no=(int)session.getAttribute("lecture_no");
-		//board.setLecture_no(lecture_no);
-		lecture_no=board.getLecture_no();//임시
-		
+		HttpSession session = request.getSession();
+		lecture_no=4560821;
+				//(int)session.getAttribute("lecture_no");
+		board.setLecture_no(lecture_no);
+		//lecture_no=board.getLecture_no();//임시
+		System.out.println("33333");
 		//board_cd, no
 		board.setDae_b("006");
 		if(board.getBoard_cd().equals("001")) {//프론트에서 공지사항이면 001로 데이터 값을 넘김  
@@ -82,7 +85,7 @@ public class BoardController {
 		board.setNo(Long.valueOf(no));
 		board.setSeq_no(Integer.valueOf(no));
 		
-		
+		System.out.println("444444");
 		boardService.insert(board);
 	}
 
@@ -114,10 +117,18 @@ public class BoardController {
 		return board;
 	}
 	
-	//All queries
-	@PostMapping(value="/list")
-	public List<BoardVO> list(){
-		return boardService.list();
+	//해당 게시판의 전체 목록을 가져옴
+	//lecture_no, board_cd필요(프론트에선 board_cd값만 필요)
+	@GetMapping(value="/list/{board_cd}")
+	public List<BoardVO> list(@PathVariable("board_cd") String board_cd, HttpServletRequest request) throws Exception{
+		HttpSession session = request.getSession();
+		int lecture_session=(int)session.getAttribute("lecture_no");
+		
+		BoardVO board=new BoardVO();
+		board.setBoard_cd(board_cd);
+		board.setLecture_no(lecture_session);
+		
+		return boardService.list(board);
 	}
 	
 	

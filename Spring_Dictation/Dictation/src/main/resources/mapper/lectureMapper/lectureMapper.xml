@@ -22,10 +22,9 @@
 			input_date,
 			update_id,
 			update_date
-			
 		) values(
-			(select year from term_cd where use_yn=1),
-			(select term from term_cd where use_yn=1),
+			(select year from term_cd where use_yn=1::VARCHAR),
+			(select term from term_cd where use_yn=1::VARCHAR),
 			#{lecture_no},
 			#{lecture_nm},
 			#{school_cd},
@@ -55,8 +54,8 @@
 	<update id="update" parameterType="LectureVO">
 		update lecture
 		set
-			year=(select year from term_cd where use_yn=1),
-			term=(select term from term_cd where use_yn=1),
+			year=(select year from term_cd where use_yn=1::VARCHAR),
+			term=(select term from term_cd where use_yn=1::VARCHAR),
 			lecture_nm=#{lecture_nm},
 			school_cd=#{school_cd},
 			grade=#{grade},
@@ -166,7 +165,7 @@
 		from
 			lecture as lec
 		right outer join
-			(select approval_cd, lecture_no from enroll where user_id=#{user_id} and approval_cd="승인") as en
+			(select approval_cd, lecture_no from enroll where user_id=#{user_id} and approval_cd='승인') as en
 		on
 			en.lecture_no=lec.lecture_no
 				

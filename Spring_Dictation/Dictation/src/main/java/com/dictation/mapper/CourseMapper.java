@@ -39,7 +39,7 @@ public interface CourseMapper {	//courseMapper.xml에서 이름,명령어 지정
 	public String getFileNm(String save_file_nm);
 
 	//강좌에 대한 받아쓰기가 등록되어 있는지 여부를 알려줌
-	public Integer dic_empty(CourseVO course);
+	public String dic_empty(CourseVO course);
 	
 	//선생님- 받아쓰기 정답 가져옴
 	public List<CourseVO> dic_answers(CourseVO course);

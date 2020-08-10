@@ -64,7 +64,7 @@ public class CourseService {
 	}
 	
 	//강좌에 대한 받아쓰기가 등록되어 있는지 여부를 알려줌
-	public Integer dic_empty(CourseVO course) {
+	public String dic_empty(CourseVO course) {
 		return courseMapper.dic_empty(course);
 	}
 	

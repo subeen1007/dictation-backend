@@ -51,8 +51,8 @@ public class BoardService {
 	}
 
 	//All queries
-	public List<BoardVO> list(){
-		return boardMapper.list();
+	public List<BoardVO> list(BoardVO board){
+		return boardMapper.list(board);
 	}
 	
 	//search file_nm for file download

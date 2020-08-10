@@ -21,8 +21,8 @@
 			update_date
 			
 		) values(
-			(select year from term_cd where use_yn=1),
-			(select term from term_cd where use_yn=1),
+			(select year from term_cd where use_yn=1::VARCHAR),
+			(select term from term_cd where use_yn=1::VARCHAR),
 			#{lecture_no},
 			#{user_id},
 			#{register_dt},
@@ -68,7 +68,7 @@
 	<update id="update_request" parameterType="EnrollVO">
 		update enroll
 		set
-			approval_cd="승인"
+			approval_cd='승인'
 		where
 			user_id=#{user_id} and lecture_no=#{lecture_no}
 	</update>
@@ -140,7 +140,7 @@
 			u.gender_cd,
 			u.email
 		from
-			user as u
+			users as u
 		right outer join
 			(select * from enroll where lecture_no=#{lecture_no}) as en
 		on
