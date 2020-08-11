@@ -23,12 +23,12 @@
 			update_date
 			
 		) values(
-			(select year from term_cd where use_yn=1),
-			(select term from term_cd where use_yn=1),
+			(select year from term_cd where use_yn=1::VARCHAR),
+			(select term from term_cd where use_yn=1::VARCHAR),
 			#{lecture_no},
-			(select concat(dae_cd, so_cd) from so_cd where dae_cd=#{dae_b} and so_cd=#{so_b} and use_yn=1),
+			(select concat(dae_cd, so_cd) from so_cd where dae_cd=#{dae_b} and so_cd=#{so_b} and use_yn=1::VARCHAR),
 			#{no},
-			(select nvl(max(seq_no),0)+1 from board ALIAS_FOR_SUBQUERY where no=#{seq_no}),
+			(select COALESCE(max(seq_no::INTEGER),0)+1 from board ALIAS_FOR_SUBQUERY where no=#{no}),
 			#{title},
 			#{content},
 			#{read_cnt},

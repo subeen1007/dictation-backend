@@ -122,7 +122,6 @@ public class StudentController {//학생 컨트롤러
 		enroll.setUser_id(user_session.getUser_id());
 		enroll.setLecture_no(lecture_session);
 		pass_course=enrollService.what_pass_course(enroll);
-		System.out.println("으헤힌어라ㅓㅑ내덛ㅅ");
 		
 		//통과한 단계번호 update
 		if(pass_course<course_step || pass_course==null) {

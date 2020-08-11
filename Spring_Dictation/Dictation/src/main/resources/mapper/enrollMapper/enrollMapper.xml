@@ -99,7 +99,7 @@
 	<!-- 해당 강좌에 대해 학생이 통과한 단계번호 알기위함 -->
 	<select id="what_pass_course" parameterType="EnrollVO" resultType="Integer">
 		select
-			pass_course_no
+			COALESCE(pass_course_no,0)
 		from
 			enroll
 		where

@@ -1,7 +1,8 @@
 package com.dictation.controller;
 
 import java.io.File;
-
+import java.lang.reflect.Array;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -190,6 +191,7 @@ public class TeacherController {//선생님 컨트롤러
 		course2.setCourse_no(course_no);
 		
 		System.out.println("this is dic_answer, i am finish_yn: "+ courseService.dic_answers(course2).get(1).getFinish_yn());
+		//List<CourseVO> course_list=Collections.sort(); courseService.dic_answers(course2);
 		return courseService.dic_answers(course2);
 	}
 	
