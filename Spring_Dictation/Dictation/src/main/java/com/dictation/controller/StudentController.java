@@ -24,9 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.dictation.service.CourseService;
 import com.dictation.service.EnrollService;
 import com.dictation.service.LectureService;
+import com.dictation.vo.CourseVO;
 import com.dictation.vo.EnrollVO;
 import com.dictation.vo.LectureVO;
 import com.dictation.vo.UserVO;
@@ -41,6 +42,8 @@ public class StudentController {//학생 컨트롤러
 	private EnrollService enrollService;
 	@Autowired
 	private LectureService lectureService;
+	@Autowired
+	private CourseService courseService;
 
 	
 	//학생들이 수강신청버튼 눌렀을때

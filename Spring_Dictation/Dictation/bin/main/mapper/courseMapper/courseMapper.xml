@@ -153,6 +153,18 @@
          update_date
       from
          course
+      where
+         lecture_no=#{lecture_no} and course_no=#{course_no} and question_no=#{question_no}
+   </select> 
+   
+   <!-- 강좌에 대해 받아쓰기 완료처리된 단계들만 반환  -->
+   <select id="finish_yes_cl" parameterType="int" resultType="Integer">
+      select
+         DISTINCT course_no
+      from
+         course
+      where
+         lecture_no=#{lecture_no} and finish_yn='1'
    </select> 
    
    
@@ -181,4 +193,5 @@
       where
          lecture_no=#{lecture_no} and course_no=#{course_no}
    </select>
+   
 </mapper>

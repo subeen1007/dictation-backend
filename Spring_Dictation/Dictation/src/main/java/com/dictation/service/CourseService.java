@@ -63,6 +63,11 @@ public class CourseService {
 		return courseMapper.list();
 	}
 	
+	//강좌에 대해 받아쓰기 완료처리된 단계들만 반환 
+	public List<Integer> finish_yes_cl(int lecture_no){
+		return courseMapper.finish_yes_cl(lecture_no);
+	}
+	
 	//search file_nm for file download
 	public String getFileNm(String save_file_nm) {
 		return courseMapper.getFileNm(save_file_nm);

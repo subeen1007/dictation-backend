@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CourseVO {
+public class CourseVO implements Comparable<CourseVO>{
 	private String year;
 	private String term;
 	private int lecture_no;
@@ -29,4 +29,14 @@ public class CourseVO {
 	
 	//private MultipartFile file;
 	
+	@Override
+    public int compareTo(CourseVO s) {
+        if (this.question_no < s.getQuestion_no()) {
+            return -1;
+        } else if (this.question_no > s.getQuestion_no()) {
+            return 1;
+        }
+        return 0;
+    }
+
 }

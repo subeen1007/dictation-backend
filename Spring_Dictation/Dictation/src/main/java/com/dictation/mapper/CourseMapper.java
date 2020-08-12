@@ -35,6 +35,9 @@ public interface CourseMapper {	//courseMapper.xml에서 이름,명령어 지정
 	//according to id query
 	public CourseVO getById(CourseVO course);	//일단은 lecture_no으로
 
+	//강좌에 대해 받아쓰기 완료처리된 단계들만 반환 
+	public List<Integer> finish_yes_cl(int lecture_no);
+	
 	//All queries
 	public List<CourseVO> list();
 	
