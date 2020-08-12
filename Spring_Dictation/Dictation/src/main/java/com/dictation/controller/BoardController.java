@@ -164,7 +164,7 @@ public class BoardController {
 		}else if(board.getBoard_cd().equals("002")) {//프론트에서 학습자료이면 002로 데이터 값을 넘김
 			so_b="002";
 			no=lecture_no+"002";
-		}else if(board.getBoard_cd().equals("002")) {////프론트에서 Q&A이면 003로 데이터 값을 넘김
+		}else if(board.getBoard_cd().equals("003")) {////프론트에서 Q&A이면 003로 데이터 값을 넘김
 			so_b="003";
 			no=lecture_no+"003";
 		}

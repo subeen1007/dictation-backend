@@ -191,8 +191,12 @@ public class TeacherController {//선생님 컨트롤러
 		course2.setCourse_no(course_no);
 		
 		System.out.println("this is dic_answer, i am finish_yn: "+ courseService.dic_answers(course2).get(1).getFinish_yn());
-		//List<CourseVO> course_list=Collections.sort(); courseService.dic_answers(course2);
-		return courseService.dic_answers(course2);
+		
+		//정렬
+		List<CourseVO> course_sort=courseService.dic_answers(course2);
+		Collections.sort(course_sort);
+	
+		return course_sort;
 	}
 	
 	//선생님이 직접 학생을 enroll테이블에 insert

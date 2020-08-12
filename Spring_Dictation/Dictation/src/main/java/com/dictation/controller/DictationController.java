@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -133,10 +134,37 @@ public class DictationController {//받아쓰기 컨트롤러
    
    //학생의 받아쓰기 데이터를 Study테이블에 insert
    @PostMapping(value="/study/insert")
-   public void study_insert(@RequestBody StudyVO study, HttpServletRequest request) {   
-      HttpSession session = request.getSession();
-      int lecture_session=(int)session.getAttribute("lecture_no");
-      studyService.insert(study);
+   public void study_insert(@RequestParam Map<String, Object> map, HttpServletRequest request) {
+	   //map(course_no, question_no, seq_no, answer) 
+	   int course_no=Integer.parseInt((String)map.get("course_no"));
+	   int question_no=Integer.parseInt((String)map.get("question_no"));
+	   String answer=(String)map.get("answer"); 
+	   
+	   //session(lectuer_no, user_id)
+	   HttpSession session = request.getSession();
+	   int lecture_session=(int)session.getAttribute("lecture_no");
+	   UserVO user_session=(UserVO)session.getAttribute("user");
+	   
+	   //StudyVO
+	   StudyVO study=new StudyVO();
+	   study.setCourse_no(course_no);
+	   study.setQuestion_no(question_no);
+	   study.setAnswer(answer);
+	   study.setLecture_no(lecture_session);
+	   study.setUser_id(user_session.getUser_id());
+	   
+	   //correct_yn도 넣어야함
+	   CourseVO course=new CourseVO();
+	   course.setLecture_no(lecture_session);
+	   course.setCourse_no(course_no);
+	   course.setQuestion_no(question_no);
+	   CourseVO c=courseService.getById(course);
+	   if(c.getQuestion().equals(answer)) {//학생답이 정답일때
+		   study.setCorrect_yn("1");
+	   }else { //오답일때
+		   study.setCorrect_yn("0");
+	   }
+	   studyService.insert(study);
    }
    
    //학생이 받아쓰기 진행할때 음성파일 재생을 위한 음성파일url
