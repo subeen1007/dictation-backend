@@ -40,14 +40,19 @@ public class BoardService {
 	
 	
 
-	//according to user Of id modify
+	//게시판 글 수정(파일 있을때)
 	public void update(BoardVO board) {
 		boardMapper.update(board);
 	}
+	
+	//게시판 글 수정(파일 없을때)
+	public void update_nofile(BoardVO board) {
+		boardMapper.update_nofile(board);
+	}
 
 	//according to id query
-	public BoardVO getById(HashMap<String, Object> map) {
-		return boardMapper.getById(map);
+	public BoardVO getById(BoardVO board) {
+		return boardMapper.getById(board);
 	}
 
 	//All queries

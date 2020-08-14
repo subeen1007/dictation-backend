@@ -90,7 +90,7 @@ public class BoardController {
 		}else if(board.getBoard_cd().equals("002")) {//프론트에서 학습자료이면 002로 데이터 값을 넘김
 			so_b="002";
 			no=lecture_no+"002";
-		}else if(board.getBoard_cd().equals("002")) {////프론트에서 Q&A이면 003로 데이터 값을 넘김
+		}else if(board.getBoard_cd().equals("003")) {////프론트에서 Q&A이면 003로 데이터 값을 넘김
 			so_b="003";
 			no=lecture_no+"003";
 		}
@@ -177,31 +177,116 @@ public class BoardController {
 
 	
       //according to id delete
-	@GetMapping(value="/delete/{no}/{seq_no}")
-	public void delete(@PathVariable("no") long no, @PathVariable("seq_no") int seq_no) {
+	@GetMapping(value="/delete/{board_cd}/{no}/{seq_no}")
+	public void delete(@PathVariable("board_cd") String board_cd, @PathVariable("no") long no, @PathVariable("seq_no") int seq_no, HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+	    int lecture_session=(int)session.getAttribute("lecture_no");
+	    
 		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("lecture_no", lecture_session);
+		map.put("board_cd", board_cd);
 		map.put("no", no);
 		map.put("seq_no", seq_no);
 		boardService.delete(map);
 		boardService.after_delete(map);
 	}
 	
-	//modify
-	//seq_no는 같아야 함
+	//게시판 수정(파일있을때)
 	@PostMapping(value="/update")
-	public void update(@RequestBody BoardVO board) {
+	public void update(@RequestParam Map<String, Object> map,@Param(value = "file") MultipartFile file, HttpServletRequest request) throws Exception {
+		//lecture_no, board_cd, no, seq_no, title, content, file_nm, save_file_nm
+		
+		
+		
+		//lecture_no을 세션값에서 가져와서 저장
+		HttpSession session = request.getSession();
+		int lecture_session=(int)session.getAttribute("lecture_no");
+		
+		
+		String board_cd=(String)map.get("board_cd");
+		long no=Long.parseLong((String)map.get("no"));
+		int seq_no=Integer.parseInt((String)map.get("seq_no"));
+		String content=(String)map.get("content");
+		String title=(String)map.get("title");
+		String originalfileName = null;
+		String save_file_nm=null;
+		
+		//board에 set
+		BoardVO board= new BoardVO();
+		board.setLecture_no(lecture_session);
+		board.setBoard_cd(board_cd);
+		board.setNo(no);
+		board.setSeq_no(seq_no);
+		board.setContent(content);
+		board.setTitle(title);
+	
+		if(file.isEmpty()){ //업로드할 파일이 없을 시
+            System.out.println("파일없음");
+        }else {
+        	System.out.println("file 실행 !!");
+    		
+    		//파일 이름가져옴(FILE_NM)
+    		originalfileName = file.getOriginalFilename();
+    	
+    		/*
+    		String fileUrl=ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/downloadFile/")
+                    .path(originalfileName)
+                    .toUriString();
+            */
+    		   			
+    		//SAVE_FILE_NM
+    		UUID uuid =UUID.randomUUID();
+    		save_file_nm=uuid.toString() +"_" +originalfileName;
+    				
+    		//파일 지정한 경로로 저장(save_file_nm 파일이름으로 저장)
+    		File dest = new File("C:/Temp/" + save_file_nm);
+    		file.transferTo(dest);
+    		
+    		System.out.println("파일이름 : "+originalfileName);
+    		System.out.println("새로운 파일이름 : "+save_file_nm);
+    		//System.out.println("파일경로 : "+fileUrl);
+    		
+    		//기존파일 삭제
+			String delete_filenm=boardService.getById(board).getSave_file_nm();//삭제할 파일이름
+			File delete_file=new File("C:/Temp/"+delete_filenm);//삭제할 파일
+			delete_file.delete();//파일 삭제
+        }
+		
+		board.setFile_nm(originalfileName);
+		board.setSave_file_nm(save_file_nm);
+		
 		boardService.update(board);
 	}
-
-	//according to id Query students
-	@GetMapping(value="/get/{no}&{seq_no}")
-	public BoardVO getById(@PathVariable("no") long no, @PathVariable("seq_no") int seq_no) {
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("no", no);
-		map.put("seq_no", seq_no);		
-		BoardVO board = boardService.getById(map);
-		return board;
+	
+	//게시판 수정(파일없을때)
+	@PostMapping(value="/update_nofile")
+	public void update_nofile(@RequestParam Map<String, Object> map, HttpServletRequest request) {
+		//lecture_no, board_cd, no, seq_no, title, content
+		
+		//lecture_no을 세션값에서 가져와서 저장
+		HttpSession session = request.getSession();
+		int lecture_session=(int)session.getAttribute("lecture_no");	
+		
+		String board_cd=(String)map.get("board_cd");
+		long no=Long.parseLong((String)map.get("no"));
+		int seq_no=Integer.parseInt((String)map.get("seq_no"));
+		String content=(String)map.get("content");
+		String title=(String)map.get("title");
+		
+		//board에 set
+		BoardVO board= new BoardVO();
+		board.setLecture_no(lecture_session);
+		board.setBoard_cd(board_cd);
+		board.setNo(no);
+		board.setSeq_no(seq_no);
+		board.setContent(content);
+		board.setTitle(title);
+		
+		boardService.update_nofile(board);
 	}
+
 	
 	//해당 게시판의 전체 목록을 가져옴
 	//lecture_no, board_cd필요(프론트에선 board_cd값만 필요)
