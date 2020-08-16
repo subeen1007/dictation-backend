@@ -16,9 +16,7 @@
 			pass_course_no,
 			study_time,
 			input_id,
-			input_date,
-			update_id,
-			update_date
+			input_date
 			
 		) values(
 			(select year from term_cd where use_yn=1::VARCHAR),
@@ -31,9 +29,7 @@
 			#{pass_course_no},
 			#{study_time},
 			#{input_id},
-			#{input_date},
-			#{update_id},
-			#{update_date}
+			now()::TIME WITH TIME ZONE
 		)
 	</insert>
  
@@ -56,10 +52,8 @@
 		set
 			pass_course_no=#{pass_course_no},
 			study_time=#{study_time},
-			input_id=#{input_id},
-			input_date=#{input_date},
 			update_id=#{update_id},
-			update_date=#{update_date}
+			update_date=now()::TIME WITH TIME ZONE
 		where
 			user_id=#{user_id} and lecture_no=#{lecture_no}
 	</update>

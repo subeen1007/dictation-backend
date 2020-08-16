@@ -10,18 +10,14 @@
 			dae_nm,
 			use_yn,
 			input_id,
-			input_date,
-			update_id,
-			update_date
+			input_date
 			
 		) values(
 			#{dae_cd},
 			#{dae_nm},
 			#{use_yn},
 			#{input_id},
-			#{input_date},
-			#{update_id},
-			#{update_date}
+			now()::TIME WITH TIME ZONE
 		)
 	</insert>
  
@@ -38,11 +34,9 @@
 		update dae_cd
 		set
 			dae_nm=#{dae_nm},
-			use_yn=#{use_yn},			
-			input_id=#{input_id},
-			input_date=#{input_date},
+			use_yn=#{use_yn},	
 			update_id=#{update_id},
-			update_date=#{update_date}
+			update_date=now()::TIME WITH TIME ZONE
 		where
 			dae_cd=#{dae_cd}
 	</update>

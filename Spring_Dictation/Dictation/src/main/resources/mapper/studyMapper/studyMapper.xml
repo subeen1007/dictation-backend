@@ -15,9 +15,7 @@
 			seq_no,
 			answer,
 			system_time,
-			correct_yn,
-			update_id,
-			update_date	
+			correct_yn
 		) values(
 			(select year from term_cd where use_yn=1::VARCHAR),
 			(select term from term_cd where use_yn=1::VARCHAR),
@@ -27,10 +25,8 @@
 			#{question_no},
 			(select COALESCE(max(seq_no::INTEGER),0)+1 from study ALIAS_FOR_SUBQUERY where lecture_no=#{lecture_no} and user_id=#{user_id} and course_no=#{course_no} and question_no=#{question_no}),
 			#{answer},
-			#{system_time},
-			#{correct_yn},
-			#{update_id},
-			#{update_date}
+			now()::TIME WITH TIME ZONE,
+			#{correct_yn}
 		)
 	</insert>
  
@@ -46,11 +42,10 @@
 			course_no=#{course_no},
 			question_no=#{question_no},
 			seq_no=#{seq_no},
-			answer=#{answer},
-			system_time=#{system_time},
+			answer=#{answer}
 			correct_yn=#{correct_yn},
 			update_id=#{update_id},
-			update_date=#{update_date}
+			update_date=now()::TIME WITH TIME ZONE
 		where
 			seq_no=#{seq_no}
 	</update>

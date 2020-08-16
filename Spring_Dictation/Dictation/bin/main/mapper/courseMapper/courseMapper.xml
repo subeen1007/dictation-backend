@@ -15,9 +15,7 @@
          file_nm,
          save_file_nm,
          input_id,
-         input_date,
-         update_id,
-         update_date
+         input_date
          
       ) values(
          (select year from term_cd where use_yn=1::VARCHAR),
@@ -29,9 +27,7 @@
          #{file_nm},
          #{save_file_nm},
          #{input_id},
-         #{input_date},
-         #{update_id},
-         #{update_date}
+         now()::TIME WITH TIME ZONE
       )
    </insert>
  
@@ -64,10 +60,8 @@
          question=#{question},
          file_nm=#{file_nm},
          save_file_nm=#{save_file_nm},
-         input_id=#{input_id},
-         input_date=#{input_date},
          update_id=#{update_id},
-         update_date=#{update_date}
+         update_date=now()::TIME WITH TIME ZONE
          
       where
          lecture_no=#{lecture_no}

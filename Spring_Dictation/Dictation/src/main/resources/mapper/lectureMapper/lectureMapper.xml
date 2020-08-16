@@ -19,9 +19,7 @@
 			teacher_id,
 			teacher_nm,		
 			input_id,
-			input_date,
-			update_id,
-			update_date
+			input_date
 		) values(
 			(select year from term_cd where use_yn=1::VARCHAR),
 			(select term from term_cd where use_yn=1::VARCHAR),
@@ -36,9 +34,7 @@
 			#{teacher_id},
 			#{teacher_nm},
 			#{input_id},
-			#{input_date},
-			#{update_id},
-			#{update_date}
+			now()::TIME WITH TIME ZONE
 		)
 	</insert>
  
@@ -64,11 +60,9 @@
 			enroll_ed_dt=#{enroll_ed_dt},
 			max_cnt=#{max_cnt},
 			teacher_id=#{teacher_id},
-			teacher_nm=#{teacher_nm},
-			input_id=#{input_id},
-			input_date=#{input_date},
+			teacher_nm=#{teacher_nm}
 			update_id=#{update_id},
-			update_date=#{update_date}
+			update_date=now()::TIME WITH TIME ZONE
 			
 		where
 			lecture_no=#{lecture_no}

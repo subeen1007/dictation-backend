@@ -15,9 +15,7 @@
 			use_yn,
 			bigo,
 			input_id,
-			input_date,
-			update_id,
-			update_date
+			input_date
 			
 		) values(
 			#{year},
@@ -29,9 +27,7 @@
 			#{use_yn},
 			#{bigo},
 			#{input_id},
-			#{input_date},
-			#{update_id},
-			#{update_date}
+			now()::TIME WITH TIME ZONE
 		)
 	</insert>
  
@@ -54,11 +50,9 @@
 			enroll_st_dt=#{enroll_st_dt},
 			enroll_ed_dt=#{enroll_ed_dt},
 			use_yn=#{use_yn},
-			bigo=#{bigo},
-			input_id=#{input_id},
-			input_date=#{input_date},
+			bigo=#{bigo}
 			update_id=#{update_id},
-			update_date=#{update_date}
+			update_date=now()::TIME WITH TIME ZONE
 			
 		where
 			year=#{year} and term=#{term}
