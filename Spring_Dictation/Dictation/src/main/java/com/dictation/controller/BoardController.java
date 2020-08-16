@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.dictation.service.BoardService;
 import com.dictation.vo.BoardVO;
+import com.dictation.vo.UserVO;
 
 
 @CrossOrigin("*")
@@ -72,6 +74,7 @@ public class BoardController {
 		board.setContent(content);
 		board.setTitle(title);
 		
+		
 		int lecture_no;
 		String so_b = null;
 		String no = null;
@@ -81,6 +84,11 @@ public class BoardController {
 		lecture_no=(int)session.getAttribute("lecture_no");
 		System.out.println(lecture_no);
 		board.setLecture_no(lecture_no);
+		
+		//input_id
+		UserVO user_session=(UserVO)session.getAttribute("user");
+		System.out.println("유저아이디:"+user_session.getUser_id());
+		board.setInput_id(user_session.getUser_id());
 		
 		//board_cd, no
 		board.setDae_b("006");
@@ -156,6 +164,11 @@ public class BoardController {
 		System.out.println(lecture_no);
 		board.setLecture_no(lecture_no);
 	
+		//input_id
+		UserVO user_session=(UserVO)session.getAttribute("user");
+		System.out.println("유저아이디:"+user_session.getUser_id());
+		board.setInput_id(user_session.getUser_id());
+				
 		//board_cd, no
 		board.setDae_b("006");
 		if(board.getBoard_cd().equals("001")) {//프론트에서 공지사항이면 001로 데이터 값을 넘김  
