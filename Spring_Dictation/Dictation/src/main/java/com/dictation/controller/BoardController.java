@@ -44,7 +44,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.dictation.service.BoardService;
+import com.dictation.service.CommentService;
 import com.dictation.vo.BoardVO;
+import com.dictation.vo.CommentVO;
+import com.dictation.vo.EnrollVO;
 import com.dictation.vo.UserVO;
 
 
@@ -55,6 +58,8 @@ public class BoardController {
 	
 	@Autowired
 	private BoardService boardService;
+	@Autowired
+	private CommentService commentService;
 	
 	
     //게시판 글작성 insert(업로드 파일 있을때)
@@ -186,6 +191,17 @@ public class BoardController {
 		
 		boardService.insert(board);
 	}
+	
+	//댓글 insert
+	@PostMapping(value="/insert_comment")
+	public void insert_comment(@RequestBody CommentVO comment, HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+	    int lecture_session=(int)session.getAttribute("lecture_no");
+	    
+		commentService.insert(comment);
+	}
+	
 
 
 	
