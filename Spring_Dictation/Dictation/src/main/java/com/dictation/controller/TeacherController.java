@@ -1,8 +1,15 @@
 package com.dictation.controller;
 
+import java.io.*;
+import java.sql.*;
+import java.util.*;
+import java.util.Date;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.lang.reflect.Array;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -37,6 +44,9 @@ import com.dictation.vo.LectureVO;
 import com.dictation.vo.UserVO;
 
 
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
+ 
 
 
 @CrossOrigin("*")
@@ -49,6 +59,8 @@ public class TeacherController {//선생님 컨트롤러
 	private EnrollService enrollService;
 	@Autowired
 	private LectureService lectureService;
+	@Autowired
+	private UserService userService;
 	
 	//단계번호, 문항번호, 정답은 vue에서 가져옴(CourseVO 1개씩만 insert)
 	//선생님 화면-받아쓰기 등록버튼
@@ -290,6 +302,181 @@ public class TeacherController {//선생님 컨트롤러
 		return lectureService.teacher_mylec(user_session.getUser_id());
 	}
 	
+	
+	//insert DB users, enroll from excel file
+	//엑셀업로드 : 엑셀파일로부터 DB의 users, enroll테이블에 값 insert
+	@PostMapping(value="/excelup")
+	public int excelup(@Param(value = "file") MultipartFile file, HttpServletRequest request) throws Exception{
+		//Connection connection = null;
+		int error_yn=0;//파일이 잘 insert됐는지 여부 반환(에러없음: 0, 있음:1)
+		//SAVE_FILE to this path
+		UUID uuid =UUID.randomUUID();
+		String save_file_path="C:/Temp/엑셀업로드/"+uuid;//엑셀 파일 임시 저장 경로
+		//user
+		HttpSession session = request.getSession();
+		UserVO user_session=(UserVO)session.getAttribute("user");
 		
+		try {    		
+    		//파일 지정한 경로로 저장(save_file_nm 파일이름으로 저장)
+    		File dest = new File(save_file_path);
+    		file.transferTo(dest);
+    		
+            long start = System.currentTimeMillis();
+            FileInputStream inputStream = new FileInputStream(save_file_path);
+            Workbook workbook = new XSSFWorkbook(inputStream);
+            Sheet firstSheet = workbook.getSheetAt(0);
+            Iterator<Row> rowIterator = firstSheet.iterator();
+            Date date=new Date();
+            System.out.println("excelup.1111");
+            //connection = DriverManager.getConnection(jdbcURL, username, password);
+            //connection.setAutoCommit(false);
+  
+            //String sql = "INSERT INTO students (name, enrolled, progress) VALUES (?, ?, ?)";
+            //PreparedStatement statement = connection.prepareStatement(sql);    
+             
+            int count = 0;
+             
+            rowIterator.next(); // skip the header row
+             
+            while (rowIterator.hasNext()) {
+            	UserVO user=new UserVO();
+            	EnrollVO enroll=new EnrollVO();
+                Row nextRow = rowIterator.next();
+                Iterator<Cell> cellIterator = nextRow.cellIterator();
+                String name="";//학생아이디
+                System.out.println("excelup.2222");
+                
+                //insert users
+                while (cellIterator.hasNext()) {
+                    Cell nextCell = cellIterator.next();
+                    System.out.println("excelup.3333");
+ 
+                    int columnIndex = nextCell.getColumnIndex();
+ 
+                    switch (columnIndex) {
+                    case 0:
+                        name = getStringValue(nextCell);
+                        user.setUser_id(name);
+                        //statement.setString(1, name);
+                        break;
+                    case 1:
+                    	String pw = getStringValue(nextCell);
+                        user.setPw(pw);
+                    	//int progress = (int) nextCell.getNumericCellValue();
+                        //statement.setInt(3, progress);
+                    case 2:
+                    	String school_cd = getStringValue(nextCell);
+                        user.setSchool_cd(school_cd);
+                    case 3:
+                    	String kor_nm = getStringValue(nextCell);
+                        user.setKor_nm(kor_nm);
+                    case 4:
+                    	String end_nm = getStringValue(nextCell);
+                        user.setEnd_nm(end_nm);
+                    case 5:
+                    	int grade = getIntValue(nextCell);
+                        user.setGrade(grade);
+                    case 6:
+                    	String ban = getStringValue(nextCell);
+                        user.setBan(ban);
+                    case 7:
+                    	String cel_phone_no = getStringValue(nextCell);
+                        user.setCel_phone_no(cel_phone_no);
+                    case 8:
+                    	String hom_phone_no = getStringValue(nextCell);
+                        user.setHom_phone_no(hom_phone_no);
+                    case 9:
+                    	String gender_cd = getStringValue(nextCell);
+                    	if(gender_cd.equals("0")) {
+                    		user.setGender_cd("002001");
+                    	}else if(gender_cd.equals("1")){
+                    		user.setGender_cd("002002");
+                    	}
+                    case 10:
+                    	String email = getStringValue(nextCell);
+                        user.setEmail(email);
+                    
+                    }
+                    
+ 
+                }
+                user.setPosition_cd("003003");
+                user.setInput_id(user_session.getUser_id());
+                userService.insert(user);
+                
+                //enroll insert
+        		enroll.setLecture_no((int)session.getAttribute("lecture_no"));
+        		enroll.setUser_id(name);
+        		enroll.setApproval_cd("승인");
+        		enroll.setApproval_dt(date);
+        		enroll.setInput_id(user_session.getUser_id());
+        		enrollService.insert(enroll);
+                
+                //statement.addBatch();
+                 
+                /*if (count % batchSize == 0) {
+                    statement.executeBatch();
+                } */             
+ 
+            }
+            System.out.println("excelup.4444");	
+            workbook.close();
+             
+            // execute the remaining queries
+            //statement.executeBatch();
+  
+            //connection.commit();
+            //connection.close();
+             
+            long end = System.currentTimeMillis();
+            System.out.printf("Import done in %d ms\n", (end - start));
+            error_yn=0;
+             
+        } catch (Exception ex1) {
+            System.out.println("Error reading file");
+            ex1.printStackTrace();
+            error_yn=1;
+		} /*
+			 * catch (SQLException ex2) { System.out.println("Database error");
+			 * ex2.printStackTrace(); }
+			 */
+		System.out.println("excelup.6666");
+		
+		//파일 삭제(엑셀이 아닌 다른파일올릴시 삭제가 안되는 문제 있음)
+		File delete_file=new File(save_file_path);//삭제할 파일
+		delete_file.delete();//파일 삭제
+		
+		return error_yn;//에러여부 반환(에러없음: 0, 있음:1)
+	}	
+	
+    /**
+     * 엑셀업로드에서 cell의 데이터를 string으로 변경
+     * 
+     * @param cell
+     * @return
+     */
+    public static String getStringValue(Cell cell) {
+        String rtnValue = "";
+        try {
+            rtnValue = cell.getStringCellValue();
+        } catch(IllegalStateException e) {
+            rtnValue = Integer.toString((int)cell.getNumericCellValue());            
+        }
+        
+        return rtnValue;
+    }
+    
+    public static int getIntValue(Cell cell) {
+        int rtnValue = 0;
+        try {
+            rtnValue = (int) cell.getNumericCellValue();
+        } catch(IllegalStateException e) {
+            rtnValue = 0;            
+        }
+        
+        return rtnValue;
+    }
+
+
 
 }

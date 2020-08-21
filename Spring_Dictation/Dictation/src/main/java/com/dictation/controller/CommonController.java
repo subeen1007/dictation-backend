@@ -49,22 +49,19 @@ public class CommonController {//공통컨트롤러
 	public void insert(@RequestBody UserVO user) {
 		
 		//position_cd
-		user.setDae_p("003");
 		if(user.getPosition_cd().equals("관리자")) {  
-			user.setSo_p("001");
+			user.setPosition_cd("003001");
 		}else if(user.getPosition_cd().equals("선생님")) {//프론트에서 선생님이면 "선생님"으로 데이터 값을 넘김
-			user.setSo_p("002");
+			user.setPosition_cd("003002");
 		}else if(user.getPosition_cd().equals("학생")) {//프론트에서 학생이면 "학생"으로 데이터 값을 넘김
-			user.setSo_p("003");
+			user.setPosition_cd("003003");
 		}
 		
 		//gender_cd
-		user.setDae_g("002");
-		System.out.println(user.getPosition_cd());
-		if(user.getGender_cd().equals("G01")) {//프론트에서 남자이면 "G01"으로 데이터 값을 넘김  
-			user.setSo_g("001");
-		}else if(user.getGender_cd().equals("G02")) {//프론트에서 여자이면 "G02"으로 데이터 값을 넘김
-			user.setSo_g("002");
+		if(user.getGender_cd().equals("002001")) {//프론트에서 남자이면 "002001"으로 데이터 값을 넘김  
+			user.setGender_cd("002001");
+		}else if(user.getGender_cd().equals("002002")) {//프론트에서 여자이면 "002002"으로 데이터 값을 넘김
+			user.setGender_cd("002002");
 		}
 		
 		userService.insert(user);

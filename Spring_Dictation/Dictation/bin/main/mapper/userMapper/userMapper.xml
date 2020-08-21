@@ -18,12 +18,15 @@
 			cel_phone_no,
 			hom_phone_no,
 			gender_cd,
-			email
+			email,
+			input_id,
+			input_date
+			
 		) values(
 			#{user_id},
 			#{pw},
 			#{school_cd},
-			(select concat(dae_cd, so_cd)::VARCHAR from "so_cd" where "dae_cd"=#{dae_p} and "so_cd"=#{so_p} and "use_yn"=1::VARCHAR),
+			#{position_cd},
 			#{kor_nm},
 			#{end_nm},
 			#{grade},
@@ -31,8 +34,10 @@
 			#{birth_dt},
 			#{cel_phone_no},
 			#{hom_phone_no},
-			(select concat(dae_cd, so_cd) from "so_cd" where"dae_cd"=#{dae_p} and "so_cd"=#{so_p} and "use_yn"=1::VARCHAR),
-			#{email}
+			#{gender_cd},
+			#{email},
+			#{input_id},
+			now()::TIME WITH TIME ZONE
 		)
 	</insert>
  
@@ -72,7 +77,11 @@
 			cel_phone_no,
 			hom_phone_no,
 			gender_cd,
-			email
+			email,
+			input_id,
+			input_date,
+			update_id,
+			update_date
 		from
 			users
 		where
@@ -96,7 +105,11 @@
 			cel_phone_no,
 			hom_phone_no,
 			gender_cd,
-			email
+			email,
+			input_id,
+			input_date,
+			update_id,
+			update_date
 		from
 			users
 	</select> 

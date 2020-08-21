@@ -24,6 +24,10 @@ public class UserVO {
 	private String hom_phone_no;
 	private String gender_cd;
 	private String email;
+	private String input_id;
+	private Date input_date;
+	private String update_id;
+	private Date update_date;
 	private String loginYn;
 	
 	//신청현황 출력할때 필요한 변수(enroll변수)
@@ -32,12 +36,5 @@ public class UserVO {
 	private String approval_dt;
 	private int pass_course_no;
 	private int study_time;
-	
-	//position_cd 에서 dae_cd와 so_cd값을 합치기 위한 변수
-	private String dae_p;
-	private String so_p;
-	//gender_cd 에서 dae_cd와 so_cd값을 합치기 위한 변수
-	private String dae_g;
-	private String so_g;
-		
+			
 }
