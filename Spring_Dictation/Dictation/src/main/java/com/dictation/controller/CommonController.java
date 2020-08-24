@@ -57,13 +57,6 @@ public class CommonController {//공통컨트롤러
 			user.setPosition_cd("003003");
 		}
 		
-		//gender_cd
-		if(user.getGender_cd().equals("002001")) {//프론트에서 남자이면 "002001"으로 데이터 값을 넘김  
-			user.setGender_cd("002001");
-		}else if(user.getGender_cd().equals("002002")) {//프론트에서 여자이면 "002002"으로 데이터 값을 넘김
-			user.setGender_cd("002002");
-		}
-		
 		userService.insert(user);
 		
 	}
@@ -96,6 +89,30 @@ public class CommonController {//공통컨트롤러
 			user.setLoginYn("0");
 			return user;
 		}
+	}
+	
+	//mypage(회원정보를 반환)
+	@GetMapping(value = "/user/get")
+	public UserVO user_getById(HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		UserVO user_session=(UserVO)session.getAttribute("user");
+		
+		UserVO user = userService.getById(user_session.getUser_id());
+		return user;
+	}
+	
+	//회원정보 수정(mypage)
+	@PostMapping(value = "/user/update")
+	public void user_update(@RequestBody UserVO user) throws Exception {
+		System.out.println("this is common/user/update");
+		//gender_cd
+		if(user.getGender_cd().equals("남자")) {//프론트에서 남자이면 "002001"으로 데이터 값을 넘김  
+			user.setGender_cd("002001");
+		}else if(user.getGender_cd().equals("여자")) {//프론트에서 여자이면 "002002"으로 데이터 값을 넘김
+			user.setGender_cd("002002");
+		}
+		
+		userService.update(user);
 	}
 	
     //according to id delete
@@ -259,7 +276,14 @@ public class CommonController {//공통컨트롤러
 	}
 
 	//according to id Query students
-	@GetMapping(value="/lecture/get")
+	@GetMapping(value="/lecture/get/{lecture_no}")
+	public LectureVO getById_nosession(@PathVariable("lecture_no") int lecture_no) {
+
+		LectureVO lecture = lectureService.getById(lecture_no);
+		return lecture;
+	}
+	
+	@GetMapping(value="/lecture/get/")
 	public LectureVO getById(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		int lecture_session=(int)session.getAttribute("lecture_no");
@@ -267,6 +291,7 @@ public class CommonController {//공통컨트롤러
 		LectureVO lecture = lectureService.getById(lecture_session);
 		return lecture;
 	}
+	
 	
 	//All queries
 	@RequestMapping(value="/lecture/list")

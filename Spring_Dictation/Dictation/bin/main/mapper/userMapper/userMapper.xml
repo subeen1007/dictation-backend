@@ -55,7 +55,18 @@
 		update users
 		set
 			pw=#{pw},
-			school_cd=#{school_cd}
+			school_cd=#{school_cd},
+			kor_nm=#{kor_nm},
+			end_nm=#{end_nm},
+			grade=#{grade},
+			ban=#{ban}, 
+			birth_dt=#{birth_dt},
+			cel_phone_no=#{cel_phone_no},
+			hom_phone_no=#{hom_phone_no},
+			gender_cd=#{gender_cd},
+			email=#{email},
+			update_id=#{user_id},
+			update_date=now()::TIME WITH TIME ZONE
 		where
 			user_id=#{user_id}
 	</update>

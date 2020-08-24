@@ -60,8 +60,8 @@
 			enroll_ed_dt=#{enroll_ed_dt},
 			max_cnt=#{max_cnt},
 			teacher_id=#{teacher_id},
-			teacher_nm=#{teacher_nm}
-			update_id=#{update_id},
+			teacher_nm=#{teacher_nm},
+			update_id=#{teacher_id},
 			update_date=now()::TIME WITH TIME ZONE
 			
 		where
