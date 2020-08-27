@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +48,7 @@ import com.dictation.service.BoardService;
 import com.dictation.service.CommentService;
 import com.dictation.vo.BoardVO;
 import com.dictation.vo.CommentVO;
+import com.dictation.vo.CourseVO;
 import com.dictation.vo.EnrollVO;
 import com.dictation.vo.UserVO;
 
@@ -328,7 +330,19 @@ public class BoardController {
 		board.setBoard_cd(board_cd);
 		board.setLecture_no(lecture_session);
 		
-		return boardService.list(board);
+		//정렬
+		List<BoardVO> board_sort=boardService.list(board);
+		System.out.println("정렬전");
+		for(int i=0; i<board_sort.size(); i++) {
+			System.out.println(board_sort.get(i).getSeq_no());
+		}
+		
+		Collections.sort(board_sort);
+		System.out.println("정렬후");
+		for(int i=0; i<board_sort.size(); i++) {
+			System.out.println(board_sort.get(i).getSeq_no());
+		}		
+		return board_sort;
 	}
 	
 	

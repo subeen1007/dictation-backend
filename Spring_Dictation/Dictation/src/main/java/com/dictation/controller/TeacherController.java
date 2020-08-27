@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -476,7 +478,62 @@ public class TeacherController {//선생님 컨트롤러
         
         return rtnValue;
     }
+    
+    //신청현황 저장 버튼
+    @PostMapping(value="/users/list_request_save")
+	public void list_request_save(@RequestBody List<UserVO> user, HttpServletRequest request) throws Exception {
+    	System.out.println("this is /users/list_request_save");
+    	//lecture_no
+		HttpSession session = request.getSession();
+		int lecture_no=(int)session.getAttribute("lecture_no");
+		List<UserVO> old_list=enrollService.list_request(lecture_no);
+		
+    	List<UserVO> add1;//추가할 원소
+    	List<UserVO> delete1;//삭제할 원소
+    	
+    	add1 = new ArrayList(user);
+    	delete1 = new ArrayList(old_list);
+    	
+    	//추가할 원소 추출
+    	for(int i=0; i<add1.size(); i++) {
+    		for(int j=0; j<old_list.size(); j++) {
+    			if(add1.get(i).getUser_id().equals(old_list.get(j).getUser_id())) {
+    				add1.remove(i);
+    				i--;
+    				j=old_list.size()+1;
+    			}
+    		}		
+    	}
+    	//삭제할 원소 추출
+    	for(int i=0; i<delete1.size(); i++) {
+    		for(int j=0; j<user.size(); j++) {
+    			if(delete1.get(i).getUser_id().equals(user.get(j).getUser_id())) {
+    				delete1.remove(i);
+    				i--;
+    				j=user.size()+1;
+    			}
+    		}		
+    	}
+    	
+    	//enroll에 추가
+    	for(UserVO ad:add1) {
+    		EnrollVO enroll = new EnrollVO();
+    		enroll.setLecture_no(lecture_no);
+    		enroll.setUser_id(ad.getUser_id());
+    		enroll.setApproval_cd("승인");
+    		
+    		enrollService.insert(enroll);
+    	}
+    	//enroll에서 삭제
+    	for(UserVO de:delete1) {
+    		EnrollVO enroll = new EnrollVO();
+    		enroll.setLecture_no(lecture_no);
+    		enroll.setUser_id(de.getUser_id());
+    		enrollService.delete(enroll);
+    	}
+    	
 
+    }
 
 
 }

@@ -283,7 +283,7 @@ public class CommonController {//공통컨트롤러
 		return lecture;
 	}
 	
-	@GetMapping(value="/lecture/get/")
+	@GetMapping(value="/lecture/get")
 	public LectureVO getById(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		int lecture_session=(int)session.getAttribute("lecture_no");
