@@ -1,5 +1,7 @@
 # Spring_Dictation
 Spring boot Backend RESTful API
+초등학생 받아쓰기 웹프로그램의 백엔드 소스 
+작업기간: 20.03~20.09
 
 
 ## DB Table
