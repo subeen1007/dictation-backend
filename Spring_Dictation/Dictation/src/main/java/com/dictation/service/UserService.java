@@ -31,6 +31,11 @@ public class UserService {
 	public void update(UserVO user) {
 		userMapper.update(user);
 	}
+	
+	//user_id 생성할때 중복되는 user_id가 있는지 검사하는코드(선생님 엑셀파일 업로드에 사용)
+	public String userid_no_search(String user_id) {
+		return userMapper.userid_no_search(user_id);
+	}
 
 	//according to id query
 	public UserVO getById(String user_id) {

@@ -1,0 +1,26 @@
+CREATE TABLE public.comment(
+    year character varying(4) NOT NULL,
+    term character varying(2) NOT NULL,
+    lecture_no bigint NOT NULL,
+    board_cd character varying(6) NOT NULL,
+    no bigint NOT NULL,
+    seq_no bigint NOT NULL,
+    user_id character varying(45) NOT NULL,
+    content character varying(2000) NOT NULL,
+    input_id character varying(45),
+    input_date time with time zone,
+    update_id character varying(45),
+    update_date time with time zone,
+    CONSTRAINT comment_pkey PRIMARY KEY (year,term ,lecture_no,board_cd,no,seq_no,user_id),
+    CONSTRAINT comment_year_term_lecture_no_board_cd_no_seq_no_fkey
+      FOREIGN KEY(year,term ,lecture_no,board_cd,no,seq_no) 
+	  REFERENCES public.board(year,term ,lecture_no,board_cd,no,seq_no)
+	  ON UPDATE CASCADE
+	  ON DELETE CASCADE
+               NOT VALID,
+   CONSTRAINT "fk_COMMENT_USER1" FOREIGN KEY (user_id)
+        REFERENCES public.users (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+);

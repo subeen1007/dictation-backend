@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dictation.mapper.CommentMapper"> 
+	
+	<!-- Insert a comment -->
+	<insert id="insert" parameterType="com.dictation.vo.CommentVO">
+		insert into comment(		
+			year,
+			term,
+			lecture_no,
+			board_cd,
+			no,
+			seq_no,
+			user_id,
+			content,
+			input_id,
+			input_date			
+		) values(
+			(select year from term_cd where use_yn=1::VARCHAR),
+			(select term from term_cd where use_yn=1::VARCHAR),
+			#{lecture_no},
+			#{board_cd},
+			#{no},
+			#{seq_no},
+			#{user_id},
+			#{content},
+			#{input_id},
+			now()::TIME WITH TIME ZONE
+		)
+	</insert>
+ 
+	<!--Delete comment -->
+	<delete id="delete" parameterType="Hashmap">
+		delete from comment where no=#{no} and seq_no=#{seq_no}
+	</delete>
+	
+	<!-- 댓글 수정 -->
+	<update id="update" parameterType="CommentVO">
+		update comment
+		set
+			content=#{content},
+			update_id=#{update_id},
+			update_date=now()::TIME WITH TIME ZONE
+		where
+			no=#{no} and seq_no=#{seq_no}
+	</update>
+	
+	<!-- according to id query -->
+	<select id="getById" parameterType="CommentVO" resultType="CommentVO">
+		select
+			year,
+			term,
+			lecture_no,
+			comment_cd,
+			no,
+			seq_no,
+			title,
+			content,
+			read_cnt,
+			file_nm,
+			save_file_nm,
+			input_id,
+			input_date,
+			update_id,
+			update_date
+		from
+			comment
+		where
+			no=#{no}
+	</select>
+ 
+	<!-- Query all -->
+	<select id="list" parameterType="CommentVO" resultType="com.dictation.vo.CommentVO">
+		select
+			year,
+			term,
+			lecture_no,
+			comment_cd,
+			no,
+			seq_no,
+			title,
+			content,
+			read_cnt,
+			file_nm,
+			save_file_nm,
+			input_id,
+			input_date,
+			update_id,
+			update_date
+		from
+			comment
+	</select> 
+	
+</mapper>
+

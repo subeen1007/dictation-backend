@@ -14,7 +14,7 @@ public class EnrollVO {
 	private String user_id;
 	private String register_dt;
 	private String approval_cd;
-	private String approval_dt;
+	private Date approval_dt;
 	private int pass_course_no;
 	private int study_time;
 	private String input_id;

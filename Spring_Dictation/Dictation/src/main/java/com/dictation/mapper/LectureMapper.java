@@ -15,7 +15,7 @@ public interface LectureMapper {	//lectureMapper.xml에서 이름,명령어 지정
 	public void insert(LectureVO lecture);
 
 	//according to id delete
-	public void delete(String lecture_no);	
+	public void delete(int lecture_no);	
 
 	//according to user Of id modify
 	public void update(LectureVO lecture);

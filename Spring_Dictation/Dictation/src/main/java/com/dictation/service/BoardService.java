@@ -28,27 +28,36 @@ public class BoardService {
 		boardMapper.delete(map);
 	}
 	
-	//update after delete
+	//선생님이 강좌 삭제했을때
+	public void lecture_delete(int lecture_no) {
+		boardMapper.lecture_delete(lecture_no);
+	}
 	
+	//update after delete
 	public void after_delete(HashMap<String, Object> map) { 
 		boardMapper.after_delete(map); 
 	}
 	
 	
 
-	//according to user Of id modify
+	//게시판 글 수정(파일 있을때)
 	public void update(BoardVO board) {
 		boardMapper.update(board);
 	}
+	
+	//게시판 글 수정(파일 없을때)
+	public void update_nofile(BoardVO board) {
+		boardMapper.update_nofile(board);
+	}
 
 	//according to id query
-	public BoardVO getById(HashMap<String, Object> map) {
-		return boardMapper.getById(map);
+	public BoardVO getById(BoardVO board) {
+		return boardMapper.getById(board);
 	}
 
 	//All queries
-	public List<BoardVO> list(){
-		return boardMapper.list();
+	public List<BoardVO> list(BoardVO board){
+		return boardMapper.list(board);
 	}
 	
 	//search file_nm for file download

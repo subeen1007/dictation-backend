@@ -19,13 +19,10 @@
 			teacher_id,
 			teacher_nm,		
 			input_id,
-			input_date,
-			update_id,
-			update_date
-			
+			input_date
 		) values(
-			(select year from term_cd where use_yn=1),
-			(select term from term_cd where use_yn=1),
+			(select year from term_cd where use_yn=1::VARCHAR),
+			(select term from term_cd where use_yn=1::VARCHAR),
 			#{lecture_no},
 			#{lecture_nm},
 			#{school_cd},
@@ -37,9 +34,7 @@
 			#{teacher_id},
 			#{teacher_nm},
 			#{input_id},
-			#{input_date},
-			#{update_id},
-			#{update_date}
+			now()::TIME WITH TIME ZONE
 		)
 	</insert>
  
@@ -47,7 +42,7 @@
  
  
 	<!-- according to id Delete students -->
-	<delete id="delete" parameterType="String">
+	<delete id="delete" parameterType="int">
 		delete from lecture where lecture_no=#{lecture_no}
 	</delete>
  
@@ -55,22 +50,19 @@
 	<update id="update" parameterType="LectureVO">
 		update lecture
 		set
-			year=#{year},
-			term=#{term},
-			lecture_no=#{lecture_no},
+			year=(select year from term_cd where use_yn=1::VARCHAR),
+			term=(select term from term_cd where use_yn=1::VARCHAR),
 			lecture_nm=#{lecture_nm},
 			school_cd=#{school_cd},
 			grade=#{grade},
-			grade=#{ban},
+			ban=#{ban},
 			enroll_st_dt=#{enroll_st_dt},
 			enroll_ed_dt=#{enroll_ed_dt},
 			max_cnt=#{max_cnt},
 			teacher_id=#{teacher_id},
 			teacher_nm=#{teacher_nm},
-			input_id=#{input_id},
-			input_date=#{input_date},
-			update_id=#{update_id},
-			update_date=#{update_date}
+			update_id=#{teacher_id},
+			update_date=now()::TIME WITH TIME ZONE
 			
 		where
 			lecture_no=#{lecture_no}
@@ -146,7 +138,7 @@
 	<!-- 학생 본인이 수강신청해서 승인된 강좌목록 띄우기 위한 코드 -->
 	<select id="student_mylec" parameterType="String" resultType="LectureVO">
 
-			select
+		select
 			lec.year,
 			lec.term,
 			lec.lecture_no,
@@ -167,7 +159,7 @@
 		from
 			lecture as lec
 		right outer join
-			(select approval_cd, lecture_no from enroll where user_id=#{user_id} and approval_cd="승인") as en
+			(select approval_cd, lecture_no from enroll where user_id=#{user_id} and approval_cd='승인') as en
 		on
 			en.lecture_no=lec.lecture_no
 				

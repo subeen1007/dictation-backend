@@ -18,26 +18,22 @@
 			file_nm,
 			save_file_nm,
 			input_id,
-			input_date,
-			update_id,
-			update_date
+			input_date
 			
 		) values(
-			(select year from term_cd where use_yn=1),
-			(select term from term_cd where use_yn=1),
+			(select year from term_cd where use_yn=1::VARCHAR),
+			(select term from term_cd where use_yn=1::VARCHAR),
 			#{lecture_no},
-			(select concat(dae_cd, so_cd) from so_cd where dae_cd=#{dae_b} and so_cd=#{so_b} and use_yn=1),
+			(select concat(dae_cd, so_cd) from so_cd where dae_cd=#{dae_b} and so_cd=#{so_b} and use_yn=1::VARCHAR),
 			#{no},
-			(select nvl(max(seq_no),0)+1 from board ALIAS_FOR_SUBQUERY where no=#{seq_no}),
+			(select COALESCE(max(seq_no::INTEGER),0)+1 from board ALIAS_FOR_SUBQUERY where no=#{no}),
 			#{title},
 			#{content},
 			#{read_cnt},
 			#{file_nm},
 			#{save_file_nm},
 			#{input_id},
-			#{input_date},
-			#{update_id},
-			#{update_date}
+			now()::TIME WITH TIME ZONE
 		)
 	</insert>
  
@@ -46,7 +42,12 @@
  
 	<!-- according to id Delete students -->
 	<delete id="delete" parameterType="Hashmap">
-		delete from board where no=#{no} and seq_no=#{seq_no}
+		delete from board where lecture_no=#{lecture_no} and board_cd=#{board_cd} and no=#{no} and seq_no=#{seq_no}
+	</delete>
+	
+	<!--선생님이 강좌 삭제했을때 -->
+	<delete id="lecture_delete" parameterType="int">
+		delete from board where lecture_no=#{lecture_no}
 	</delete>
 	
 	<!-- update after delete -->
@@ -55,37 +56,38 @@
 		set
 			seq_no=seq_no-1
 		where
-			no=#{no} and seq_no>=#{seq_no}
+			lecture_no=#{lecture_no} and board_cd=#{board_cd} and no=#{no} and seq_no>=#{seq_no}
 	</update>
  
-	<!-- according to id Modifying Student Information-->
+	<!-- 게시판 글 수정(파일 있을때) -->
 	<update id="update" parameterType="BoardVO">
 		update board
 		set
-			year=#{year},
-			term=#{term},
-			lecture_no=#{lecture_no},
-			board_cd=#{board_cd},
-			no=#{no},
-			seq_no=#{seq_no},
 			title=#{title},
 			content=#{content},
-			read_cnt=#{read_cnt},
 			file_nm=#{file_nm},
 			save_file_nm=#{save_file_nm},
-			input_id=#{input_id},
-			input_date=#{input_date},
 			update_id=#{update_id},
-			update_date=#{update_date}
-			
+			update_date=now()::TIME WITH TIME ZONE
 		where
-			no=#{no} and seq_no=#{seq_no}
+			lecture_no=#{lecture_no} and board_cd=#{board_cd} and no=#{no} and seq_no=#{seq_no}
 	</update>
 	
+	<!-- 게시판 글 수정(파일 없을때) -->
+	<update id="update_nofile" parameterType="BoardVO">
+		update board
+		set
+			title=#{title},
+			content=#{content},
+			update_id=#{update_id},
+			update_date=now()::TIME WITH TIME ZONE
+		where
+			lecture_no=#{lecture_no} and board_cd=#{board_cd} and no=#{no} and seq_no=#{seq_no}
+	</update>
 	
  
 	<!-- according to id query -->
-	<select id="getById" parameterType="Hashmap" resultType="BoardVO">
+	<select id="getById" parameterType="BoardVO" resultType="BoardVO">
 		select
 			year,
 			term,
@@ -105,13 +107,13 @@
 		from
 			board
 		where
-			no=#{no} and seq_no=#{seq_no}
+			lecture_no=#{lecture_no} and board_cd=#{board_cd} and no=#{no} and seq_no=#{seq_no}
 	</select>
 	
 	
  
 	<!-- Query all -->
-	<select id="list" parameterType="int" resultType="com.dictation.vo.BoardVO">
+	<select id="list" parameterType="BoardVO" resultType="com.dictation.vo.BoardVO">
 		select
 			year,
 			term,
@@ -130,6 +132,8 @@
 			update_date
 		from
 			board
+		where
+			lecture_no=#{lecture_no} and board_cd=#{board_cd}
 	</select> 
 	
 	<select id="getFileNm" parameterType="String" resultType="String">
