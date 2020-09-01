@@ -26,6 +26,8 @@ public class CourseVO implements Comparable<CourseVO>{
 	
 	//받아쓰기 수정할때 file이 수정됐는지 알기위한 변수
 	private boolean change_file;
+	//받아쓰기 할때 파일 경로
+	private String fileUrl;
 	
 	//private MultipartFile file;
 	

@@ -23,6 +23,11 @@ public class StudyService {
 		studyMapper.insert(study);
 	}	
 
+	//강좌삭제했을때 study데이터도 삭제
+	public void delete_lecture(int lecture_no) {
+		studyMapper.delete_lecture(lecture_no);
+	}
+	
 	//according to user Of id modify
 	public void update(StudyVO study) {
 		studyMapper.update(study);

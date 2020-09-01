@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -184,7 +183,7 @@ public class BoardController {
 		}else if(board.getBoard_cd().equals("002")) {//프론트에서 학습자료이면 002로 데이터 값을 넘김
 			so_b="002";
 			no=lecture_no+"002";
-		}else if(board.getBoard_cd().equals("003")) {////프론트에서 Q&A이면 003로 데이터 값을 넘김
+		}else if(board.getBoard_cd().equals("003")) {//프론트에서 Q&A이면 003로 데이터 값을 넘김
 			so_b="003";
 			no=lecture_no+"003";
 		}
@@ -329,20 +328,8 @@ public class BoardController {
 		BoardVO board=new BoardVO();
 		board.setBoard_cd(board_cd);
 		board.setLecture_no(lecture_session);
-		
-		//정렬
-		List<BoardVO> board_sort=boardService.list(board);
-		System.out.println("정렬전");
-		for(int i=0; i<board_sort.size(); i++) {
-			System.out.println(board_sort.get(i).getSeq_no());
-		}
-		
-		Collections.sort(board_sort);
-		System.out.println("정렬후");
-		for(int i=0; i<board_sort.size(); i++) {
-			System.out.println(board_sort.get(i).getSeq_no());
-		}		
-		return board_sort;
+				
+		return boardService.list(board);
 	}
 	
 	

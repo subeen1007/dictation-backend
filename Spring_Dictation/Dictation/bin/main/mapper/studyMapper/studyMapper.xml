@@ -30,6 +30,12 @@
 		)
 	</insert>
  
+ 	<!-- 강좌삭제했을때 study데이터도 삭제 -->
+ 	<delete id="delete_lecture" parameterType="int">
+      delete from study 
+      where
+         lecture_no=#{lecture_no}
+   </delete>
  
 	<!-- according to id Modifying Student Information-->
 	<update id="update" parameterType="StudyVO">

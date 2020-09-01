@@ -341,11 +341,22 @@ public class TeacherController {//선생님 컨트롤러
             rowIterator.next(); // skip the header row
              
             while (rowIterator.hasNext()) {
+            	//user_id생성
+            	String user_id = rand_str(7);
+        		String userid_no_search = userService.userid_no_search(user_id); //생성한난수가 디비에 이미있는지 검사(없으면 null, 있으면 lecture_no값)
+        		
+        		//user_id가 중복되지 않는 값으로 설정
+        		while(userid_no_search!=null) {
+        			user_id=rand_str(7);
+        			userid_no_search = userService.userid_no_search(user_id);        		
+        		}
+        		
+        		
+        		
             	UserVO user=new UserVO();
             	EnrollVO enroll=new EnrollVO();
                 Row nextRow = rowIterator.next();
                 Iterator<Cell> cellIterator = nextRow.cellIterator();
-                String name="";//학생아이디
                 System.out.println("excelup.2222");
                 
                 //insert users
@@ -357,44 +368,34 @@ public class TeacherController {//선생님 컨트롤러
  
                     switch (columnIndex) {
                     case 0:
-                        name = getStringValue(nextCell);
-                        user.setUser_id(name);
-                        //statement.setString(1, name);
-                        break;
-                    case 1:
-                    	String pw = getStringValue(nextCell);
-                        user.setPw(pw);
-                    	//int progress = (int) nextCell.getNumericCellValue();
-                        //statement.setInt(3, progress);
-                    case 2:
                     	String school_cd = getStringValue(nextCell);
                         user.setSchool_cd(school_cd);
-                    case 3:
+                    case 1:
                     	String kor_nm = getStringValue(nextCell);
                         user.setKor_nm(kor_nm);
-                    case 4:
+                    case 2:
                     	String end_nm = getStringValue(nextCell);
                         user.setEnd_nm(end_nm);
-                    case 5:
+                    case 3:
                     	int grade = getIntValue(nextCell);
                         user.setGrade(grade);
-                    case 6:
+                    case 4:
                     	String ban = getStringValue(nextCell);
                         user.setBan(ban);
-                    case 7:
+                    case 5:
                     	String cel_phone_no = getStringValue(nextCell);
                         user.setCel_phone_no(cel_phone_no);
-                    case 8:
+                    case 6:
                     	String hom_phone_no = getStringValue(nextCell);
                         user.setHom_phone_no(hom_phone_no);
-                    case 9:
+                    case 7:
                     	String gender_cd = getStringValue(nextCell);
                     	if(gender_cd.equals("0")) {
                     		user.setGender_cd("002001");
                     	}else if(gender_cd.equals("1")){
                     		user.setGender_cd("002002");
                     	}
-                    case 10:
+                    case 8:
                     	String email = getStringValue(nextCell);
                         user.setEmail(email);
                     
@@ -402,13 +403,15 @@ public class TeacherController {//선생님 컨트롤러
                     
  
                 }
+                user.setUser_id(user_id);
+                user.setPw(user_id);
                 user.setPosition_cd("003003");
                 user.setInput_id(user_session.getUser_id());
                 userService.insert(user);
                 
                 //enroll insert
         		enroll.setLecture_no((int)session.getAttribute("lecture_no"));
-        		enroll.setUser_id(name);
+        		enroll.setUser_id(user_id);
         		enroll.setApproval_cd("승인");
         		enroll.setApproval_dt(date);
         		enroll.setInput_id(user_session.getUser_id());
@@ -478,6 +481,21 @@ public class TeacherController {//선생님 컨트롤러
         
         return rtnValue;
     }
+    
+    //user_id생성을 위한 난수 만들기 함수(엑셀업로드에서 user_id를 insert하기 위한 함수)
+    public String rand_str(int num) {//num자리번호 난수생성
+		Random random = new Random();
+		String randomStr ="";
+		String randomNum="";
+		for(int i=0; i<(num+1)/2; i++) {
+			randomStr += String.valueOf((char) ((int) (random.nextInt(26)) + 97));
+		}
+		
+		for(int i=0; i<num-(num+1)/2; i++) {
+			randomNum += String.valueOf(random.nextInt(10));
+		}
+		return randomStr+randomNum;
+	}
     
     //신청현황 저장 버튼
     @PostMapping(value="/users/list_request_save")

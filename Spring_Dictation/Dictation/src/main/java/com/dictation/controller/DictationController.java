@@ -122,6 +122,7 @@ public class DictationController {//받아쓰기 컨트롤러
       
    }
    
+   
    //강좌에 대해 받아쓰기 완료처리된 단계들만 반환 
    @GetMapping(value="/course/finish_yes_cl")
    public List<Integer> finish_yes_cl(HttpServletRequest request) {
@@ -184,6 +185,25 @@ public class DictationController {//받아쓰기 컨트롤러
       String url="C:/Temp/"+savefile_nm; // "C:/Temp/"은 추후에 서버에 파일저장 경로로 바꿀것
       //System.out.println("url주소??"+url);
       return url;
+   }
+   
+   //선생님이 "학습자료보기" 들어갔을때 받아쓰기 정보 return
+   @PostMapping(value="/course/get")
+   public CourseVO course_get(@Param(value = "course_no") int course_no, @Param(value = "question_no") int question_no,
+         HttpServletRequest request) {
+	  System.out.println("this is course/get!!!");
+      HttpSession session = request.getSession();
+      int lecture_session=(int)session.getAttribute("lecture_no");
+      
+      CourseVO course=new CourseVO();
+      course.setLecture_no(lecture_session);
+      course.setCourse_no(course_no);
+      course.setQuestion_no(question_no);
+      
+      CourseVO get_course=courseService.getById(course);
+      get_course.setFileUrl("C:/Temp/"+get_course.getSave_file_nm());
+
+      return get_course;
    }
    
    //학생이 받아쓰기를 진행할때 음성파일 클릭시 음성나오도록 구현

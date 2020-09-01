@@ -91,7 +91,7 @@
    <update id="finish_yes" parameterType="CourseVO">
       update course
       set
-         finish_yn=#{finish_yn}         
+         finish_yn=#{finish_yn} 
       where
          lecture_no=#{lecture_no} and course_no=#{course_no}
    </update>

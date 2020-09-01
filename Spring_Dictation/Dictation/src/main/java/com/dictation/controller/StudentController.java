@@ -44,7 +44,16 @@ public class StudentController {//학생 컨트롤러
 	private LectureService lectureService;
 	@Autowired
 	private CourseService courseService;
-
+	
+	//학생아이디 반환
+	@GetMapping(value="/user/user_id")
+	public String user_id(HttpServletRequest request) {
+		//user_id
+		HttpSession session = request.getSession();
+		UserVO user_session=(UserVO)session.getAttribute("user");
+		return user_session.getUser_id();
+	}
+	
 	
 	//학생들이 수강신청버튼 눌렀을때
 	//세션값user_id받아와서  enroll테이블에 insert

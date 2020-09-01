@@ -23,6 +23,7 @@ import com.dictation.service.BoardService;
 import com.dictation.service.CourseService;
 import com.dictation.service.EnrollService;
 import com.dictation.service.LectureService;
+import com.dictation.service.StudyService;
 import com.dictation.service.UserService;
 import com.dictation.vo.CourseVO;
 import com.dictation.vo.EnrollVO;
@@ -43,6 +44,8 @@ public class CommonController {//공통컨트롤러
 	private UserService userService;
 	@Autowired
 	private BoardService boardService;
+	@Autowired
+	private StudyService studyService;
 	
 	//회원가입
 	@PostMapping(produces = "application/json;charset=UTF-8",value="/signup")
@@ -76,6 +79,7 @@ public class CommonController {//공통컨트롤러
 			//if() 관리자코드, 선생님코드 로그인시 세션확인값 생성 필요
 			
 			session.setAttribute("user", user);//세션에 UserVO값줌
+			//session.setAttribute("position_cd", user.getPosition_cd());//세션에 신분코드 값을 줌(선생님 003002, 학생 003003)
 			
 			UserVO user_session=(UserVO)session.getAttribute("user");
 			System.out.println("아이디 세션값 :" +user_session.getUser_id());
@@ -267,6 +271,7 @@ public class CommonController {//공통컨트롤러
 		enrollService.lecture_delete(lecture_no);
 		courseService.lecture_delete(lecture_no);
 		lectureService.delete(lecture_no);
+		studyService.delete_lecture(lecture_no);
 	}
 	//modify
 	//lecture_no는 같아야 함

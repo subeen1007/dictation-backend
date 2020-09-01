@@ -36,5 +36,5 @@ public class UserVO {
 	private String approval_dt;
 	private int pass_course_no;
 	private int study_time;
-			
+
 }

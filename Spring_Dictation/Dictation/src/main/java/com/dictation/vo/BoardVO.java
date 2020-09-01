@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BoardVO implements Comparable<BoardVO>{
+public class BoardVO{
 	private String year;
 	private String term;
 	private int lecture_no;
@@ -28,7 +28,10 @@ public class BoardVO implements Comparable<BoardVO>{
 	//board_cd에서 dae_cd와 so_cd값을 합치기 위한 변수
 	private String dae_b;
 	private String so_b;
+	//파일을 수정했는지 안했는지 확인하는 용
+	private String file;
 	
+	/*정렬
 	@Override
     public int compareTo(BoardVO s) {
         if (this.seq_no < s.getSeq_no()) {
@@ -37,6 +40,6 @@ public class BoardVO implements Comparable<BoardVO>{
             return 1;
         }
         return 0;
-    }
+    }*/
 	
 }
